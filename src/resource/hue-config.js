@@ -16,8 +16,6 @@ export const fetchAllLights = async () => await axios({ url: `${baseUrl}/lights`
 export const fetchAllGroups = async () => await axios({ url: `${baseUrl}/groups` });
 
 export const toggleLight = async (lightId, light) => {
-    console.log(lightId)
-    console.log(light)
     await axios({
         url: `${baseUrl}/lights/${lightId}/state`,
         method: 'PUT',
@@ -29,8 +27,6 @@ export const toggleGroup = async (group, lights) => {
     const lightsToToggle = group.lights
         .map(lightId => ({ ...lights[lightId], id: lightId }))
         .filter(light => light.state.on === !group.state.any_on);
-
-        console.log(lightsToToggle);
     const promises = [];
     lightsToToggle.forEach(light => promises.push(toggleLight(light.id, light)));
     await Promise.all(promises);
