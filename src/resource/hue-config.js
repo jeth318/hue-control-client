@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { propEq, find } from 'ramda';
 import { config } from 'dotenv';
 config();
 
@@ -9,37 +8,36 @@ const baseUrl = `http://${ip}/api/${user}`;
 
 export const fetchHueData = async () => {
     const response = await Promise.all([fetchAllGroups(), fetchAllLights()]);
-    return parseData({ groups: response[0].data, lights: response[1].data });
+    return { groups: response[0].data, lights: response[1].data };
 }
 
 export const fetchAllLights = async () => await axios({ url: `${baseUrl}/lights` });
 
 export const fetchAllGroups = async () => await axios({ url: `${baseUrl}/groups` });
 
-export const toggleLight = async light => await axios({
-        url: `${baseUrl}/lights/${light.id}/state`,
+export const toggleLight = async (lightId, light) => {
+    console.log(lightId)
+    console.log(light)
+    await axios({
+        url: `${baseUrl}/lights/${lightId}/state`,
         method: 'PUT',
         data: { on: !light.state.on }
     });
 
+}
 export const toggleGroup = async (group, lights) => {
     const lightsToToggle = group.lights
-        .map(lightId => ({ ... find(propEq('id', lightId), lights) }))
-        .filter(light => light.state.on === !group.state.any_on)
+        .map(lightId => ({ ...lights[lightId], id: lightId }))
+        .filter(light => light.state.on === !group.state.any_on);
+
+        console.log(lightsToToggle);
     const promises = [];
-    lightsToToggle.forEach(light => promises.push(toggleLight(light, lights)));
+    lightsToToggle.forEach(light => promises.push(toggleLight(light.id, light)));
     await Promise.all(promises);
 }
 
-export const setBrightness = async (light, brightness) => await axios({
-        url: `${baseUrl}/lights/${light.id}/state`,
+export const setBrightness = async (lightId, brightness) => await axios({
+        url: `${baseUrl}/lights/${lightId}/state`,
         method: 'PUT',
         data: { bri: brightness }
     });
-
-
-const parseData = rawData => {
-    const lights = Object.keys(rawData.lights).map(key => ({ ...rawData.lights[key], id: key }));
-    const groups = Object.keys(rawData.groups).map(key => ({ ...rawData.groups[key], id: key }));
-    return { lights, groups };
-}

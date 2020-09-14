@@ -5,6 +5,7 @@
         :is-active=isActive
         :initial-value="brightness"
         :light=light
+        :lightId=lightId
     ></light-slider>
   </div>
 </template>
@@ -13,8 +14,6 @@
 import LightSlider from "./light-slider.vue";
 import { toggleLight } from "../resource/hue-config.js";
 import { mapGetters } from 'vuex';
-import { find, propEq } from 'ramda';
-
 
 export default {
   name: "light",
@@ -24,14 +23,14 @@ export default {
   },
   methods: {
     async toggle() {
-        await toggleLight(this.light, this.$store);
+        await toggleLight(this.lightId, this.light);
         this.$store.dispatch('update')
     },
   },
   computed: {
     ...mapGetters(['lights']),
     light() {
-      return find(propEq('id', this.lightId), this.lights) || {};
+      return this.lights[this.lightId]
     },
     brightness() {
       return this.light.state.bri;

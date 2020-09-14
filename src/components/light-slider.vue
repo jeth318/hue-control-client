@@ -1,7 +1,7 @@
 <template>
    <v-slider
       :disabled="!isActive"
-      @change="onSlideEnd(light, brigthness)"
+      @change="onSlideEnd"
       v-model="brigthness"
       :min="0"
       :max="254"
@@ -18,16 +18,17 @@ export default {
     props: {
         initialValue: { type: Number, default: 0 },
         isActive: { type: Boolean, default: false },
-        light: { type: Object }
+        light: { type: Object },
+        lightId: { type: String }
     },
     created() {
         this.brigthness = this.initialValue;
     },
     methods: {
-        async onSlideEnd(light) {
-            await setBrightness(light, this.brigthness);
+        async onSlideEnd() {
+            await setBrightness(this.lightId, this.brigthness);
             if (this.brigthness === 0) {
-                await toggleLight(light);
+                await toggleLight(this.lightId, this.light);
             }
             this.$store.dispatch('update');
         }

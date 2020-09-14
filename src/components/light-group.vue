@@ -2,13 +2,12 @@
   <div class="group">
     <h3>{{ group.name }}</h3>
     <v-switch @change="toggleGroup" v-model="group.state.any_on"></v-switch>
-    <light v-for="lightId in group.lights" :key="lightId" :light-id="lightId"></light>
+    <light v-for="(value, index) in group.lights" :key="index" :light-id=value></light>
   </div>
 </template>
 
 <script>
 import Light from "./light.vue";
-import { find, propEq } from "ramda";
 import { toggleGroup } from "../resource/hue-config.js";
 import { mapGetters } from "vuex";
 
@@ -21,7 +20,7 @@ export default {
   computed: {
     ...mapGetters(["lights", "groups"]),
     group() {
-      return find(propEq("id", this.groupId), this.groups);
+      return this.groups[this.groupId];
     },
     isAnyLightOn() {
       return this.group.state.any_on;

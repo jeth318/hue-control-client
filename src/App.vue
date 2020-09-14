@@ -1,8 +1,8 @@
 <template>
   <v-app dark>
     <div class="app-grid">
-      <div class="groups-container">
-          <light-group v-for="group in groups" :key="group.id" :group-id=group.id></light-group>
+      <div v-if="groups" class="groups-container">
+      <light-group v-for="(value, index) in groups" :key="index" :group-id=index></light-group>
       </div>
     </div>
   </v-app>
@@ -23,8 +23,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'groups',
-      'lights'
+      'groups'
     ])
   },
 };
