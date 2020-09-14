@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { fetchHueData } from '../resource/hue-config';

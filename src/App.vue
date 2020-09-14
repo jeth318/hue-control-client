@@ -19,7 +19,7 @@ export default {
     this.$store.dispatch('update');
     setInterval(() => {
       this.$store.dispatch('update');
-    }, 60000)
+    }, 10000)
   },
   computed: {
     ...mapGetters([

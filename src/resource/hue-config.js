@@ -21,7 +21,6 @@ export const toggleLight = async (lightId, light) => {
         method: 'PUT',
         data: { on: !light.state.on }
     });
-
 }
 export const toggleGroup = async (group, lights) => {
     const lightsToToggle = group.lights
