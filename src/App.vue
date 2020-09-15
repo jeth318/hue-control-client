@@ -1,10 +1,9 @@
 <template>
   <v-app dark>
     <div class="app-grid">
-      <div>
-      </div>
+      <div></div>
       <div v-if="groups" class="groups-container">
-      <light-group v-for="(value, index) in groups" :key="index" :group-id=index></light-group>
+        <light-group v-for="(value, index) in groups" :key="index" :group-id="index"></light-group>
       </div>
     </div>
   </v-app>
@@ -15,18 +14,16 @@ import LightGroup from './components/light-group.vue';
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "App",
+  name: 'App',
   components: { LightGroup },
   mounted() {
     this.$store.dispatch('update');
     setInterval(() => {
       this.$store.dispatch('update');
-    }, 10000)
+    }, 10000);
   },
   computed: {
-    ...mapGetters([
-      'groups'
-    ])
+    ...mapGetters(['groups']),
   },
 };
 </script>
