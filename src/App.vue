@@ -1,6 +1,8 @@
 <template>
   <v-app dark>
     <div class="app-grid">
+      <div>
+      </div>
       <div v-if="groups" class="groups-container">
       <light-group v-for="(value, index) in groups" :key="index" :group-id=index></light-group>
       </div>

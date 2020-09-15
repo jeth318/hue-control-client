@@ -1,8 +1,24 @@
 <template>
   <div class="group">
-    <h3>{{ group.name }}</h3>
-    <v-switch @change="toggleGroup" v-model="group.state.any_on"></v-switch>
+      <v-card
+    class="mx-auto card"
+    max-width="400"
+  >
+    <v-img
+      class="white--text align-end"
+      height="200px"
+      :src="imageUrl"
+    >
+    <div class="name-wrapper">
+      <v-card-title>{{ group.name }}</v-card-title>
+    </div>
+    </v-img>
+    <div class="lights">
+
+    <v-switch @change="toggleGroup" v-model="group.state.any_on"></v-switch>    
     <light v-for="(value, index) in group.lights" :key="index" :light-id=value></light>
+    </div>
+  </v-card>
   </div>
 </template>
 
@@ -24,6 +40,20 @@ export default {
     },
     isAnyLightOn() {
       return this.group.state.any_on;
+    },
+    imageUrl() {
+      switch (this.group.name) {
+        case 'Vardagsrum':
+          return '/livingroom.jpeg';
+        case 'Kök':
+          return '/kitchen.jpg';
+        case 'Hallen':
+          return '/hallway.jpg';
+        case 'Badrum':
+          return '/bathroom.jpeg';
+          default:
+          return '';
+      }
     }
   },
   methods: {
@@ -40,10 +70,16 @@ export default {
 
 <style lang="css" scoped>
 .group {
-  border: 1px solid black;
-  padding: 30px;
   border-radius: 5px;
   margin-top: 40px;
-  flex: 0 50%;
+  padding: 10px
+}
+
+.name-wrapper {
+  background: rgba(0, 0, 0, 0.45)
+}
+
+.lights {
+  padding: 20px;
 }
 </style>
