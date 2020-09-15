@@ -1,5 +1,5 @@
 # hue-control
-
+Welcome!
 ## Project setup
 ```
 npm install
