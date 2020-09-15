@@ -7,35 +7,34 @@ const user = process.env.VUE_APP_HUE_USER_ID;
 const baseUrl = `http://${ip}/api/${user}`;
 
 export const fetchHueData = async () => {
-  const response = await Promise.all([fetchAllGroups(), fetchAllLights()]);
-  return { groups: response[0].data, lights: response[1].data };
+    const { groups } = await fetchAllGroups().data;
+    const { lights } = await fetchAllLights().data;
+    return { groups, lights };
 };
 
 export const fetchAllLights = async () =>
-  await axios({ url: `${baseUrl}/lights` });
+    await axios({ url: `${baseUrl}/lights` });
 
 export const fetchAllGroups = async () =>
-  await axios({ url: `${baseUrl}/groups` });
+    await axios({ url: `${baseUrl}/groups` });
 
 export const toggleLight = async (lightId, light) => {
-  await axios({
-    url: `${baseUrl}/lights/${lightId}/state`,
-    method: 'PUT',
-    data: { on: !light.state.on }
-  });
+    await axios({
+        url: `${baseUrl}/lights/${lightId}/state`,
+        method: 'PUT',
+        data: { on: !light.state.on }
+    });
 };
 export const toggleGroup = async (group, lights) => {
-  const lightsToToggle = group.lights
-    .map(lightId => ({ ...lights[lightId], id: lightId }))
-    .filter(light => light.state.on === !group.state.any_on);
-  const promises = [];
-  lightsToToggle.forEach(light => promises.push(toggleLight(light.id, light)));
-  await Promise.all(promises);
+    const lightsToToggle = group.lights
+        .map(lightId => ({ ...lights[lightId], id: lightId }))
+        .filter(light => light.state.on === !group.state.any_on);
+    await Promise.all(lightsToToggle.map(light => toggleLight(light.id, light)));
 };
 
 export const setBrightness = async (lightId, brightness) =>
-  await axios({
-    url: `${baseUrl}/lights/${lightId}/state`,
-    method: 'PUT',
-    data: { bri: brightness }
-  });
+    await axios({
+        url: `${baseUrl}/lights/${lightId}/state`,
+        method: 'PUT',
+        data: { bri: brightness }
+    });

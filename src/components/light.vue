@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <v-btn :class="{ success: isActive }" @click="toggle">{{ name }}</v-btn>
-    <light-slider
-      :is-active="isActive"
-      :initial-value="brightness"
-      :light="light"
-      :lightId="lightId"
-    ></light-slider>
-  </div>
+    <div>
+        <v-btn :class="{ success: isActive }" @click="toggle">{{ name }}</v-btn>
+        <light-slider
+            :is-active="isActive"
+            :initial-value="brightness"
+            :light="light"
+            :lightId="lightId"
+        ></light-slider>
+    </div>
 </template>
 
 <script>
@@ -16,32 +16,32 @@ import { toggleLight } from '../resource/hue-config.js';
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'light',
-  components: { LightSlider },
-  props: {
-    lightId: { type: String },
-  },
-  methods: {
-    async toggle() {
-      await toggleLight(this.lightId, this.light);
-      this.$store.dispatch('update');
+    name: 'light',
+    components: { LightSlider },
+    props: {
+        lightId: { type: String },
     },
-  },
-  computed: {
-    ...mapGetters(['lights']),
-    light() {
-      return this.lights[this.lightId];
+    methods: {
+        async toggle() {
+            await toggleLight(this.lightId, this.light);
+            this.$store.dispatch('update');
+        },
     },
-    brightness() {
-      return this.light.state.bri;
+    computed: {
+        ...mapGetters(['lights']),
+        light() {
+            return this.lights[this.lightId];
+        },
+        brightness() {
+            return this.light.state.bri;
+        },
+        name() {
+            return this.light.name;
+        },
+        isActive() {
+            return this.light.state.on;
+        },
     },
-    name() {
-      return this.light.name;
-    },
-    isActive() {
-      return this.light.state.on;
-    },
-  },
 };
 </script>
 
