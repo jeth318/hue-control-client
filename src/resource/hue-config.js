@@ -7,10 +7,9 @@ const user = process.env.VUE_APP_HUE_USER_ID;
 const baseUrl = `http://${ip}/api/${user}`;
 
 export const fetchHueData = async () => {
-    const { groups } = await fetchAllGroups().data;
-    const { lights } = await fetchAllLights().data;
-    return { groups, lights };
-};
+    const response = await Promise.all([fetchAllGroups(), fetchAllLights()]);
+    return { groups: response[0].data, lights: response[1].data };
+}
 
 export const fetchAllLights = async () =>
     await axios({ url: `${baseUrl}/lights` });
