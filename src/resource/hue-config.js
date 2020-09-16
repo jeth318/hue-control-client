@@ -4,7 +4,8 @@ config();
 
 const ip = process.env.VUE_APP_HUE_BRIDGE_IP;
 const user = process.env.VUE_APP_HUE_USER_ID;
-const baseUrl = `http://${ip}/api/${user}`;
+const protocol = process.env.VUE_APP_PROTOCOL;
+const baseUrl = `${protocol}://${ip}/api/${user}`;
 
 export const fetchHueData = async () => {
     const response = await Promise.all([fetchAllGroups(), fetchAllLights()]);
