@@ -16,7 +16,7 @@
 
 <script>
 import Light from './light.vue';
-import { toggleGroup } from '../resource/hue-config.js';
+import { toggleGroup } from '../rest/rest.resource.js';
 import { mapGetters } from 'vuex';
 
 export default {

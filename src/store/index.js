@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { fetchHueData } from '../resource/hue-config';
+import { fetchHueData } from '../rest/rest.resource.js';
 
 Vue.use(Vuex);
 

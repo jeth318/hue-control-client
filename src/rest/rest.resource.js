@@ -1,11 +1,6 @@
 import axios from 'axios';
-import { config } from 'dotenv';
-config();
-
-const ip = process.env.VUE_APP_HUE_BRIDGE_IP;
-const user = process.env.VUE_APP_HUE_USER_ID;
-const protocol = process.env.VUE_APP_PROTOCOL;
-const baseUrl = `${protocol}://${ip}/api/${user}`;
+import { baseUrl, endpoints } from './rest.config.js';
+const { LIGHTS, GROUPS, STATE } = endpoints;
 
 export const fetchHueData = async () => {
     const response = await Promise.all([fetchAllGroups(), fetchAllLights()]);
@@ -13,18 +8,19 @@ export const fetchHueData = async () => {
 }
 
 export const fetchAllLights = async () =>
-    await axios({ url: `${baseUrl}/lights` });
+    await axios({ url: `${baseUrl}/${LIGHTS}` });
 
 export const fetchAllGroups = async () =>
-    await axios({ url: `${baseUrl}/groups` });
+    await axios({ url: `${baseUrl}/${GROUPS}` });
 
 export const toggleLight = async (lightId, light) => {
     await axios({
-        url: `${baseUrl}/lights/${lightId}/state`,
+        url: `${baseUrl}/${LIGHTS}/${lightId}/${STATE}`,
         method: 'PUT',
         data: { on: !light.state.on }
     });
 };
+
 export const toggleGroup = async (group, lights) => {
     const lightsToToggle = group.lights
         .map(lightId => ({ ...lights[lightId], id: lightId }))

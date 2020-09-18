@@ -12,7 +12,7 @@
 
 <script>
 import LightSlider from './light-slider.vue';
-import { toggleLight } from '../resource/hue-config.js';
+import { toggleLight } from '../rest/rest.resource.js';
 import { mapGetters } from 'vuex';
 
 export default {

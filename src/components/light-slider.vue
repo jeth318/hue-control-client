@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { setBrightness, toggleLight } from '../resource/hue-config.js';
+import { setBrightness, toggleLight } from '../rest/rest.resource.js';
 export default {
     name: 'light-slider',
     data: () => ({
