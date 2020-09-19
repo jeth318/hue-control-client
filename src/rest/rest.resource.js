@@ -14,8 +14,8 @@ export const fetchAllGroups = async () =>
     await axios({ url: `${baseUrl}/${GROUPS}` });
 
 export const toggleLight = async (lightId, light) => {
-    await axios({
-        url: `${baseUrl}/${LIGHTS}/${lightId}/${STATE}`,
+    return await axios({
+        url: `${baseUrl}/${LIGHTS}/${lightId}`,
         method: 'PUT',
         data: { on: !light.state.on }
     });
@@ -30,7 +30,7 @@ export const toggleGroup = async (group, lights) => {
 
 export const setBrightness = async (lightId, brightness) =>
     await axios({
-        url: `${baseUrl}/lights/${lightId}/state`,
+        url: `${baseUrl}/${LIGHTS}/${lightId}`,
         method: 'PUT',
         data: { bri: brightness }
     });

@@ -2,10 +2,10 @@
 import { config } from 'dotenv';
 config();
 
-const ip = process.env.VUE_APP_HUE_BRIDGE_IP;
-const user = process.env.VUE_APP_HUE_USER_ID;
+const host = process.env.VUE_APP_API_HOST;
 const protocol = process.env.VUE_APP_PROTOCOL;
-export const baseUrl = `${protocol}://${ip}/api/${user}`;
+const port = process.env.VUE_APP_PORT;
+export const baseUrl = `${protocol}://${host}:${port}`;
 export const endpoints = {
     LIGHTS: 'lights',
     GROUPS: 'groups',
