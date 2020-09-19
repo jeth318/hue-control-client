@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cd /home/pi/Apps/hue-control
+cd /home/pi/Apps/hue-control/client
 echo "Stashing lock files"
 git stash
 
