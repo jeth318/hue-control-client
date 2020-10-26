@@ -1,13 +1,17 @@
 <template>
     <v-app dark>
         <div class="app-grid">
-            <div></div>
+            <div>
+                <button @click="toggleFullScreen">{{ fullScreen ? 'Exit fullscreen' : 'Go fullscreen' }}</button>
+            </div>
             <div v-if="groups" class="groups-container">
-                <light-group v-for="(value, index) in groups" :key="index" :group-id="index"></light-group>
+                <light-group
+                    v-for="(value, index) in groups"
+                    :key="index"
+                    :group-id="index"
+                ></light-group>
             </div>
-            <div v-else>
-                Loading...
-            </div>
+            <div v-else>Loading...</div>
         </div>
     </v-app>
 </template>
@@ -18,6 +22,9 @@ import { mapGetters } from 'vuex';
 
 export default {
     name: 'App',
+    data: () => ({
+        fullScreen: false
+    }),
     components: { LightGroup },
     created() {
         this.$store.dispatch('update');
@@ -29,6 +36,35 @@ export default {
     },
     computed: {
         ...mapGetters(['groups']),
+    },
+    methods: {
+        toggleFullScreen() {
+            this.fullScreen = !this.fullScreen;
+            var doc = window.document;
+            var docEl = doc.documentElement;
+
+            var requestFullScreen =
+                docEl.requestFullscreen ||
+                docEl.mozRequestFullScreen ||
+                docEl.webkitRequestFullScreen ||
+                docEl.msRequestFullscreen;
+            var cancelFullScreen =
+                doc.exitFullscreen ||
+                doc.mozCancelFullScreen ||
+                doc.webkitExitFullscreen ||
+                doc.msExitFullscreen;
+
+            if (
+                !doc.fullscreenElement &&
+                !doc.mozFullScreenElement &&
+                !doc.webkitFullscreenElement &&
+                !doc.msFullscreenElement
+            ) {
+                requestFullScreen.call(docEl);
+            } else {
+                cancelFullScreen.call(doc);
+            }
+        },
     },
 };
 </script>
