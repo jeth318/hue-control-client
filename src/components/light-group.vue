@@ -1,6 +1,6 @@
 <template>
     <div class="group">
-        <v-card class="mx-auto card" max-width="235">
+        <v-card class="mx-auto card" max-width="245">
             <v-img class="white--text align-end" height="200px" :src="imageUrl">
                 <div class="name-wrapper">
                     <v-card-title>{{ group.name }}</v-card-title>
