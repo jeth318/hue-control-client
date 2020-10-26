@@ -1,8 +1,8 @@
 <template>
     <v-app dark>
         <div class="app-grid">
-            <div>
-                <button @click="toggleFullScreen">{{ fullScreen ? 'Exit fullscreen' : 'Go fullscreen' }}</button>
+            <div class="toggle-button-wrapper">
+                <button class="toggle-button" @click="toggleFullScreen">{{ fullScreen ? 'Exit fullscreen' : 'Go fullscreen' }}</button>
             </div>
             <div v-if="groups" class="groups-container">
                 <light-group
@@ -77,5 +77,12 @@ export default {
 .groups-container {
     display: flex;
     flex-wrap: wrap;
+}
+
+.toggle-button-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 </style>
