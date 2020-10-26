@@ -5,6 +5,9 @@
             <div v-if="groups" class="groups-container">
                 <light-group v-for="(value, index) in groups" :key="index" :group-id="index"></light-group>
             </div>
+            <div v-else>
+                Loading...
+            </div>
         </div>
     </v-app>
 </template>
