@@ -6,9 +6,6 @@
 import { setBrightness, toggleLight } from '../rest/rest.resource.js';
 export default {
     name: 'light-slider',
-    data: () => ({
-        brigthness: 0,
-    }),
     props: {
         initialValue: { type: Number, default: 0 },
         isActive: { type: Boolean, default: false },
@@ -17,6 +14,14 @@ export default {
     },
     created() {
         this.brigthness = this.initialValue;
+    },
+    computed: {
+        brigthness: {
+            get() {
+                return this.light.state.bri || this.initialValue;
+            },
+            set(){}
+        } 
     },
     methods: {
         async onSlideEnd() {
