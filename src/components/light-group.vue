@@ -1,7 +1,7 @@
 <template>
     <div class="group">
-        <v-card class="mx-auto card" max-width="292">
-            <v-img class="white--text align-end" height="200px" :src="imageUrl">
+        <v-card class="card mx-auto card">
+            <v-img class="image white--text align-end" :src="imageUrl">
                 <div class="name-wrapper">
                     <v-card-title>{{ group.name }}</v-card-title>
                 </div>
@@ -69,5 +69,26 @@ export default {
 
 .lights {
     padding: 20px;
+}
+
+.card {
+    width: 292px;
+}
+
+.image {
+    height: 200px;
+}
+
+@media only screen and (max-width: 600px) {
+  .group {
+    width: 100%;
+  }
+  .card {
+      max-width: 100%;
+  }
+
+  .image {
+      height: 130px
+  }
 }
 </style>

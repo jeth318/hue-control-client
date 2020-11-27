@@ -18,6 +18,7 @@
 
 <script>
 import LightGroup from './components/light-group.vue';
+import { toggleFullScreen } from './utils/window-util';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -40,32 +41,9 @@ export default {
     methods: {
         toggleFullScreen() {
             this.fullScreen = !this.fullScreen;
-            var doc = window.document;
-            var docEl = doc.documentElement;
-
-            var requestFullScreen =
-                docEl.requestFullscreen ||
-                docEl.mozRequestFullScreen ||
-                docEl.webkitRequestFullScreen ||
-                docEl.msRequestFullscreen;
-            var cancelFullScreen =
-                doc.exitFullscreen ||
-                doc.mozCancelFullScreen ||
-                doc.webkitExitFullscreen ||
-                doc.msExitFullscreen;
-
-            if (
-                !doc.fullscreenElement &&
-                !doc.mozFullScreenElement &&
-                !doc.webkitFullscreenElement &&
-                !doc.msFullscreenElement
-            ) {
-                requestFullScreen.call(docEl);
-            } else {
-                cancelFullScreen.call(doc);
-            }
-        },
-    },
+            toggleFullScreen();
+        }
+    }
 };
 </script>
 <style lang="css" scoped>
