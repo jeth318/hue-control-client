@@ -84,7 +84,7 @@ export default {
     width: 100%;
   }
   .card {
-      max-width: 100%;
+      width: 100%;
   }
 
   .image {
