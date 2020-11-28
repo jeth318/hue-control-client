@@ -10,7 +10,7 @@
             </div>
             <div v-else>Loading...</div>
         </div>
-        <div class="toggle-button-wrapper">
+        <div v-if="!isAppleDevice" class="toggle-button-wrapper">
                 <button class="toggle-button" @click="toggleFullScreen">{{ fullScreen ? 'Exit fullscreen' : 'Go fullscreen' }}</button>
             </div>
     </v-app>
@@ -37,6 +37,11 @@ export default {
     },
     computed: {
         ...mapGetters(['groups']),
+        isAppleDevice() {
+            return ['iPhone', 'iPad', 'iPod']
+                .filter(device => navigator.userAgent.includes(device))
+                .length > 0;
+        }
     },
     methods: {
         toggleFullScreen() {
