@@ -33,7 +33,7 @@ export default {
     mounted() {
         setInterval(() => {
             this.$store.dispatch('update');
-        }, 60000);
+        }, 10000);
     },
     computed: {
         ...mapGetters(['groups']),
