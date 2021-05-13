@@ -72,7 +72,7 @@ export default {
 }
 
 .card {
-    width: 242px;
+    width: 212px;
 }
 
 .image {
