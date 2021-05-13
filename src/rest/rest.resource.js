@@ -45,7 +45,7 @@ export const setBrightness = async (lightId, brightness) =>
 
 export const updateRvc = async data =>
     await axios({
-        url: `http://localhost:3001/state`,
+        url: `${baseUrlRvc}/${RVC_API}`,
         method: 'POST',
         data
     });
