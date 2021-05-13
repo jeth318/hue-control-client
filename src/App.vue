@@ -7,6 +7,7 @@
                     :key="index"
                     :group-id="index"
                 ></light-group>
+                <rvc></rvc>
             </div>
             <div v-else>Loading...</div>
         </div>
@@ -20,13 +21,14 @@
 import LightGroup from './components/light-group.vue';
 import { toggleFullScreen } from './utils/window-util';
 import { mapGetters } from 'vuex';
+import Rvc from './components/rvc.vue';
 
 export default {
     name: 'App',
     data: () => ({
         fullScreen: false
     }),
-    components: { LightGroup },
+    components: { LightGroup, Rvc },
     created() {
         this.$store.dispatch('update');
     },
