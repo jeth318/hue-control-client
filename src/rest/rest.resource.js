@@ -4,6 +4,7 @@ const { LIGHTS, GROUPS, STATE } = endpoints;
 
 export const fetchHueData = async () => {
     const response = await Promise.all([fetchAllGroups(), fetchAllLights()]);
+    console.log({response});
     return { groups: response[0].data, lights: response[1].data };
 }
 
