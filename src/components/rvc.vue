@@ -11,9 +11,9 @@
                 <v-switch @change="toggle" v-model="isActive"></v-switch>
             </div>
             <div v-else class="lock-wrapper">
-                <img class="time-lock" src="/lock.svg" />
+                <img class="time-lock" src="/time_lock.png" />
             </div>
-                <div v-if="closed">Risig tid på dygnet för att dammsuga. Aktiveras igen klockan 10:00.</div> 
+                <div v-if="closed">Aktiveras igen klockan 09:00.</div> 
                 <v-btn class="action-item" :disabled="rvc.mode === 'standby'" :class="{ warning: true }" @click="toggle({ 'mode': 'standby' })">PAUSA</v-btn>
                 <v-btn class="action-item" :disabled="rvc.charging" :class="{ primary: true }" @click="toggle({ 'mode': 'chargego' })">LADDA</v-btn>
                 <div class="rvc-details">
@@ -29,7 +29,6 @@
 import { updateRvc } from '../rest/rest.resource.js';
 import { mapGetters } from 'vuex';
 import { isOutsideOperationalHours } from '../utils/rvc-util.js';
-const schedule = require('node-schedule');
 const CronJob = require('cron').CronJob;
 
 
@@ -64,7 +63,7 @@ export default {
         },
         initializeCronJobs() {
             const ctx = this;
-            const closingJob = new CronJob('1 1 19 * * *', function(time) {
+            const closingJob = new CronJob('1 1 21 * * *', function(time) {
                 ctx.closed = true;
                 console.log('Closing RVC');
             }, null, true, 'Europe/Stockholm');
@@ -121,8 +120,8 @@ export default {
 }
 
 .time-lock {
-    width: 30px;
-    height: 30px;
+    width: 60px;
+    height: 60px;
 }
 
 .switch-wrapper {
@@ -135,6 +134,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
