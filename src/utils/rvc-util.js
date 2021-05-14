@@ -5,5 +5,5 @@ export const isOutsideOperationalHours = (() => {
     const date = new Date(); 
     const now = date.getHours() * 60 + date.getMinutes();
     console.log({ start, end, now });
-    return start >= now && now >= end;
+    return now >= start && now >= end;
 })();
