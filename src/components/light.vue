@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-btn :class="{ success: isActive }" @click="toggle">{{ name }}</v-btn>
+        <v-btn class="light-button" :class="{ success: isActive }" @click="toggle">{{ name }}</v-btn>
         <light-slider
             :is-active="isActive"
             :initial-value="brightness"
@@ -46,4 +46,7 @@ export default {
 </script>
 
 <style>
+    .light-button {
+        font-size: 3.75vw;
+    }
 </style>

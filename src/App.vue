@@ -60,6 +60,7 @@ export default {
     justify-content: center;
     flex-direction: row;
 }
+
 .groups-container {
     display: flex;
     flex-wrap: wrap;

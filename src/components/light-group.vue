@@ -68,11 +68,11 @@ export default {
 }
 
 .lights {
-    padding: 20px;
+    padding: 10px;
 }
 
 .card {
-    width: 212px;
+    width: 214px;
 }
 
 .image {

@@ -9,7 +9,11 @@
             <div class="actions">
                 <v-switch @change="toggle" v-model="isActive"></v-switch>
                 <v-btn class="action-item" :disabled="rvc.mode === 'standby'" :class="{ warning: true }" @click="toggle({ 'mode': 'standby' })">PAUSA</v-btn>
-                <v-btn class="action-item" :class="{ primary: true }" @click="toggle({ 'mode': 'chargego' })">LADDA</v-btn>
+                <v-btn class="action-item" :disabled="rvc.charging" :class="{ primary: true }" @click="toggle({ 'mode': 'chargego' })">LADDA</v-btn>
+                <div class="rvc-details">
+                    <p>🔋 Batteri: {{ rvc.battery }}%</p>
+                    <p v-if="rvc.charging">🏠 Dockad</p>
+                </div>
             </div>
         </v-card>
     </div>
@@ -60,15 +64,13 @@ export default {
 
 .actions {
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
     padding: 20px;
 }
 
 .action-item {
     margin: 10px;
-    width: 100px;
+    width: 200px;
 }
 
 .card {
@@ -77,6 +79,12 @@ export default {
 
 .image {
     height: 200px;
+}
+
+.rvc-details {
+    margin-top: 20px;
+    width: 100%;
+    font-size: 20px
 }
 
 @media only screen and (max-width: 600px) {
