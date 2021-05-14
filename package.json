@@ -10,9 +10,12 @@
   "dependencies": {
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "cron": "^1.8.2",
     "dotenv": "^8.2.0",
     "node-hue-api": "^4.0.9",
+    "node-schedule": "^2.0.0",
     "ramda": "^0.27.1",
+    "scheduler": "^0.20.2",
     "vue": "^2.6.11",
     "vuetify": "^2.2.11",
     "vuex": "^3.4.0"

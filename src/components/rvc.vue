@@ -1,5 +1,5 @@
 <template>
-    <div class="group">
+    <div class="group" :class="{closed }" >
         <v-card class="card mx-auto card">
             <v-img class="image white--text align-end" :src="imageUrl">
                 <div class="name-wrapper">
@@ -7,7 +7,13 @@
                 </div>
             </v-img>
             <div class="actions">
+            <div v-if="!closed" class="switch-wrapper">
                 <v-switch @change="toggle" v-model="isActive"></v-switch>
+            </div>
+            <div v-else class="lock-wrapper">
+                <img class="time-lock" src="/lock.svg" />
+            </div>
+                <div v-if="closed">Risig tid på dygnet för att dammsuga. Aktiveras igen klockan 10:00.</div> 
                 <v-btn class="action-item" :disabled="rvc.mode === 'standby'" :class="{ warning: true }" @click="toggle({ 'mode': 'standby' })">PAUSA</v-btn>
                 <v-btn class="action-item" :disabled="rvc.charging" :class="{ primary: true }" @click="toggle({ 'mode': 'chargego' })">LADDA</v-btn>
                 <div class="rvc-details">
@@ -22,12 +28,34 @@
 <script>
 import { updateRvc } from '../rest/rest.resource.js';
 import { mapGetters } from 'vuex';
+import scheduler from 'scheduler';
+const schedule = require('node-schedule');
+const CronJob = require('cron').CronJob;
+
 
 export default {
     name: 'rvc',
     data: () => ({
-        isActive: false
+        isActive: false,
+        closed: false,
+        timeUntilOpen: null
     }),
+    mounted() {
+        const ctx = this;
+        var closingJob = new CronJob('1 1 21 * * *', function(time) {
+            console.log({ time });
+            ctx.closed = true;
+            console.log('Disableding RVC');
+        }, null, true, 'Europe/Stockholm');
+        closingJob.start();
+
+        var openingJob = new CronJob('1 1 09 * * *', function(time) {
+            console.log({ time });
+            ctx.closed = false;
+            console.log('Enabling RVC');
+        }, null, true, 'Europe/Stockholm');
+        openingJob.start();
+    },
     computed: {
         ...mapGetters(['rvc']),
         imageUrl() {
@@ -41,9 +69,7 @@ export default {
             this.$store.dispatch('update');
         },
         onRvcModeState(mode) {
-            console.log({ modeHandler: mode });
             this.isActive = (mode != 'chargego' && mode !== 'standby');
-            console.log('THIS.ISACTIVE', this.isActive);
         }
     },
     watch: {
@@ -65,7 +91,7 @@ export default {
 .actions {
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 10px;
 }
 
 .action-item {
@@ -85,6 +111,24 @@ export default {
     margin-top: 20px;
     width: 100%;
     font-size: 20px
+}
+
+.time-lock {
+    width: 30px;
+    height: 30px;
+}
+
+.switch-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.lock-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
 @media only screen and (max-width: 600px) {
