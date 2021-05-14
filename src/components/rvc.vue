@@ -28,7 +28,7 @@
 <script>
 import { updateRvc } from '../rest/rest.resource.js';
 import { mapGetters } from 'vuex';
-import scheduler from 'scheduler';
+import { isOutsideOperationalHours } from '../utils/rvc-util.js';
 const schedule = require('node-schedule');
 const CronJob = require('cron').CronJob;
 
@@ -41,20 +41,11 @@ export default {
         timeUntilOpen: null
     }),
     mounted() {
-        const ctx = this;
-        var closingJob = new CronJob('1 1 21 * * *', function(time) {
-            console.log({ time });
-            ctx.closed = true;
-            console.log('Disableding RVC');
-        }, null, true, 'Europe/Stockholm');
-        closingJob.start();
+        this.initializeCronJobs();
+        if (isOutsideOperationalHours) {
+            this.closed = true;
+        }
 
-        var openingJob = new CronJob('1 1 09 * * *', function(time) {
-            console.log({ time });
-            ctx.closed = false;
-            console.log('Enabling RVC');
-        }, null, true, 'Europe/Stockholm');
-        openingJob.start();
     },
     computed: {
         ...mapGetters(['rvc']),
@@ -70,6 +61,22 @@ export default {
         },
         onRvcModeState(mode) {
             this.isActive = (mode != 'chargego' && mode !== 'standby');
+        },
+        initializeCronJobs() {
+            const ctx = this;
+            const closingJob = new CronJob('1 1 19 * * *', function(time) {
+                ctx.closed = true;
+                console.log('Closing RVC');
+            }, null, true, 'Europe/Stockholm');
+            closingJob.start();
+
+            const openingJob = new CronJob('1 1 09 * * *', function(time) {
+                ctx.closed = false;
+                console.log('Opening RVC');
+            }, null, true, 'Europe/Stockholm');
+            
+            openingJob.start();
+            closingJob.start();
         }
     },
     watch: {
