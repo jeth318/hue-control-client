@@ -1,5 +1,5 @@
 <template>
-    <div class="group" :class="{closed }" >
+    <div class="group" :class="{closed }">
         <v-card class="card mx-auto card">
             <v-img class="image white--text align-end" :src="imageUrl">
                 <div class="name-wrapper">
@@ -7,18 +7,18 @@
                 </div>
             </v-img>
             <div class="actions">
-            <div v-if="!closed" class="switch-wrapper">
-                <v-switch @change="toggle" v-model="isActive"></v-switch>
-            </div>
-            <div v-else class="lock-wrapper">
-                <img class="time-lock" src="/time_lock.png" />
-            </div>
-                <div v-if="closed">Aktiveras igen klockan 09:00.</div> 
-                <v-btn class="action-item" :disabled="rvc.mode === 'standby'" :class="{ warning: true }" @click="toggle({ 'mode': 'standby' })">PAUSA</v-btn>
-                <v-btn class="action-item" :disabled="rvc.charging" :class="{ primary: true }" @click="toggle({ 'mode': 'chargego' })">LADDA</v-btn>
+                <div v-if="!closed" class="switch-wrapper">
+                    <v-switch @change="toggle({ 'mode': `${isActive ? 'smart' : 'chargego'}` })" v-model="isActive"></v-switch>
+                </div>
+                <div v-else class="lock-wrapper">
+                    <img class="time-lock" src="/time_lock.png" />
+                </div>
+                <div v-if="closed">Aktiveras igen klockan 09:00.</div>
+                <v-btn class="action-item" :disabled="!inMotion" :class="{ warning: true }" @click="toggle({ 'mode': 'standby' })">PAUSA</v-btn>
+                <v-btn class="action-item" :disabled="isCharging || rvc.mode === 'chargego'" :class="{ primary: true }" @click="toggle({ 'mode': 'chargego' })">LADDA</v-btn>
                 <div class="rvc-details">
                     <p>🔋 Batteri: {{ rvc.battery }}%</p>
-                    <p v-if="rvc.charging">🏠 Dockad</p>
+                    <p v-if="isCharging">🏠 Dockad</p>
                 </div>
             </div>
         </v-card>
@@ -28,54 +28,38 @@
 <script>
 import { updateRvc } from '../rest/rest.resource.js';
 import { mapGetters } from 'vuex';
-import { isOutsideOperationalHours } from '../utils/rvc-util.js';
-const CronJob = require('cron').CronJob;
-
+import { isOutsideOperationalHours, initializeCronJobs } from '../utils/rvc-util.js';
 
 export default {
     name: 'rvc',
     data: () => ({
         isActive: false,
-        closed: false,
-        timeUntilOpen: null
+        closed: false
     }),
-    mounted() {
-        this.initializeCronJobs();
-        if (isOutsideOperationalHours) {
-            this.closed = true;
-        }
-
+    created() {
+        initializeCronJobs(this);
+        this.closed = isOutsideOperationalHours;
     },
     computed: {
         ...mapGetters(['rvc']),
         imageUrl() {
             return '/rvc.jpg';
         },
+        isCharging() {
+            return this.rvc.charging;
+        },
+        inMotion() {
+            return this.rvc.inMotion;
+        }
     },
     methods: {
         async toggle(data) {
-            this.isActive = data.mode === 'smart';
+            console.log( { data });
             await updateRvc(data);
             this.$store.dispatch('update');
         },
         onRvcModeState(mode) {
             this.isActive = (mode != 'chargego' && mode !== 'standby');
-        },
-        initializeCronJobs() {
-            const ctx = this;
-            const closingJob = new CronJob('1 1 21 * * *', function(time) {
-                ctx.closed = true;
-                console.log('Closing RVC');
-            }, null, true, 'Europe/Stockholm');
-            closingJob.start();
-
-            const openingJob = new CronJob('1 1 09 * * *', function(time) {
-                ctx.closed = false;
-                console.log('Opening RVC');
-            }, null, true, 'Europe/Stockholm');
-            
-            openingJob.start();
-            closingJob.start();
         }
     },
     watch: {
@@ -139,15 +123,14 @@ export default {
 }
 
 @media only screen and (max-width: 600px) {
-  .group {
-    width: 100%;
-  }
-  .card {
-      width: 100%;
-  }
-
-  .image {
-      height: 130px
-  }
+    .group {
+        width: 100%;
+    }
+    .card {
+        width: 100%;
+    }
+    .image {
+        height: 130px
+    }
 }
 </style>

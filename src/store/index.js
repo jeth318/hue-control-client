@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { fetchHueData, fetchRvcData } from '../rest/rest.resource.js';
-
+import { isEmpty } from 'ramda';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -33,6 +33,9 @@ export default new Vuex.Store({
     },
     rvc: state => {
         return state.rvc;
-      }
+    },
+    hasFetchedAllData: state => {
+        return !isEmpty(state.groups) && !isEmpty(state.lights) && !isEmpty(state.rvc)
+    }
   }
 });

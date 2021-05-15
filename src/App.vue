@@ -1,7 +1,7 @@
 <template>
     <v-app dark>
         <div class="app-grid">
-            <div v-if="groups" class="groups-container">
+            <div v-if="hasFetchedAllData" class="groups-container">
                 <light-group
                     v-for="(value, index) in groups"
                     :key="index"
@@ -38,7 +38,7 @@ export default {
         }, 10000);
     },
     computed: {
-        ...mapGetters(['groups']),
+        ...mapGetters(['groups', 'hasFetchedAllData']),
         isAppleDevice() {
             return ['iPhone', 'iPad', 'iPod']
                 .filter(device => navigator.userAgent.includes(device))
