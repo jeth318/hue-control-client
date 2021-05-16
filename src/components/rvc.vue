@@ -157,7 +157,7 @@ export default {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 30px;
+    margin-top: 15px;
 }
 
 .suction-heading {
