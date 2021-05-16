@@ -51,7 +51,7 @@ export default {
     methods: {
         async toggleGroup() {
             await toggleGroup(this.group, this.lights);
-            this.$store.dispatch('update');
+            this.$store.dispatch('updateLights');
         },
     },
 };

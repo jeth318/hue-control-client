@@ -11,18 +11,23 @@ export default new Vuex.Store({
     rvc: {}
   },
   mutations: {
-    async update(state) {
+    async updateLights(state) {
       const data = await fetchHueData();
-      const rvcData = await fetchRvcData();
       state.lights = data.lights;
       state.groups = data.groups;
-      state.rvc = rvcData;
-    }
+    },
+    async updateRvc(state) {
+        const rvcData = await fetchRvcData();
+        state.rvc = rvcData;
+      }
   },
   actions: {
-    update(ctx) {
-      ctx.commit('update');
-    }
+    updateLights(ctx) {
+      ctx.commit('updateLights');
+    },
+    updateRvc(ctx) {
+        ctx.commit('updateRvc');
+      }
   },
   getters: {
     groups: state => {

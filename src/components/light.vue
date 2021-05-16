@@ -24,7 +24,7 @@ export default {
     methods: {
         async toggle() {
             await toggleLight(this.lightId, this.light);
-            this.$store.dispatch('update');
+            this.$store.dispatch('updateLights');
         },
     },
     computed: {

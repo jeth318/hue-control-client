@@ -24,7 +24,7 @@ export default {
             if (this.brigthness === 0) {
                 await toggleLight(this.lightId, this.light);
             }
-            this.$store.dispatch('update');
+            this.$store.dispatch('updateLights');
         },
     },
 };

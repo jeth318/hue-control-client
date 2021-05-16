@@ -9,8 +9,8 @@
         </div>
         <div v-if="!isAppleDevice" class="toggle-button-wrapper">
             <button class="toggle-button" @click="toggleFullScreen">
-                {{ fullScreen ? 'Exit fullscreen' : 'Go fullscreen' }}
-            </button>
+                    {{ fullScreen ? 'Exit fullscreen' : 'Go fullscreen' }}
+                </button>
         </div>
     </v-app>
 </template>
@@ -28,11 +28,13 @@ export default {
     }),
     components: { LightGroup, Rvc },
     created() {
-        this.$store.dispatch('update');
+        this.$store.dispatch('updateLights');
+        this.$store.dispatch('updateRvc');
     },
     mounted() {
         setInterval(() => {
-            this.$store.dispatch('update');
+            this.$store.dispatch('updateLights');
+            this.$store.dispatch('updateRvc');
         }, 10000);
     },
     computed: {

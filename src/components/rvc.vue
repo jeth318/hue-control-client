@@ -1,5 +1,5 @@
 <template>
-    <div class="group" :class="{closed }">
+    <div class="group" :class="{ closed }">
         <v-card class="card mx-auto card">
             <v-img class="image white--text align-end" :src="imageUrl">
                 <div class="name-wrapper">
@@ -11,21 +11,54 @@
                     <img class="time-lock" src="/time_lock.png" />
                 </div>
                 <div v-if="closed">Aktiveras igen klockan 09:00.</div>
-                <v-btn class="action-item success" :disabled="mode === 'smart' || closed" @click="toggle('smart')">STÄDA</v-btn>
-                <v-btn class="action-item warning" :disabled="mode === 'standby' || (mode ==='chargego' && rvc.charging)" @click="toggle('standby')">PAUSA</v-btn>
-                <v-btn class="action-item primary" :disabled="isCharging || mode === 'chargego'" @click="toggle('chargego')">LADDA</v-btn>
+                <v-btn
+                    class="action-item success"
+                    :disabled="mode === 'smart' || closed"
+                    @click="toggle('smart')"
+                    >STÄDA</v-btn
+                >
+                <v-btn
+                    class="action-item warning"
+                    :disabled="
+                        mode === 'standby' ||
+                        (mode === 'chargego' && rvc.charging)
+                    "
+                    @click="toggle('standby')"
+                    >PAUSA</v-btn
+                >
+                <v-btn
+                    class="action-item primary"
+                    :disabled="isCharging || mode === 'chargego'"
+                    @click="toggle('chargego')"
+                    >LADDA</v-btn
+                >
                 <div class="suction-settings">
                     <div class="radio-group">
-                        <input type="radio" id="option-one" v-model="suction" value="mute">
+                        <input
+                            type="radio"
+                            id="option-one"
+                            v-model="suction"
+                            value="mute"
+                        />
                         <label for="option-one">Svag</label>
-                        <input type="radio" id="option-two" v-model="suction" value="normal">
+                        <input
+                            type="radio"
+                            id="option-two"
+                            v-model="suction"
+                            value="normal"
+                        />
                         <label for="option-two">Normal</label>
-                        <input type="radio" id="option-three" v-model="suction" value="strong">
+                        <input
+                            type="radio"
+                            id="option-three"
+                            v-model="suction"
+                            value="strong"
+                        />
                         <label for="option-three">Stark</label>
                     </div>
                 </div>
                 <div class="rvc-details">
-                    <p>⚙️ {{ currentModeText }}</p>
+                    <p v-if="currentModeText">⚙️ {{ currentModeText }}</p>
                     <p>🔋 Batteri: {{ rvc.battery }}%</p>
                     <p v-if="isCharging">🏠 Dockad</p>
                 </div>
@@ -37,14 +70,17 @@
 <script>
 import { updateRvc } from '../rest/rest.resource.js';
 import { mapGetters } from 'vuex';
-import { isOutsideOperationalHours, initializeCronJobs } from '../utils/rvc-util.js';
+import {
+    isOutsideOperationalHours,
+    initializeCronJobs,
+} from '../utils/rvc-util.js';
 
 export default {
     name: 'rvc',
     data: () => ({
         isActive: false,
         closed: false,
-        suction: null
+        suction: null,
     }),
     created() {
         initializeCronJobs(this);
@@ -59,13 +95,15 @@ export default {
         currentModeText() {
             switch (this.mode) {
                 case 'smart':
-                    return 'Städar...'
+                    return 'Städar...';
                 case 'standby':
-                    return 'Pausad'
+                    return 'Pausad';
                 case 'chargego':
-                    return this.isCharging ?
-                        this.rvc.battery === 100 ? 'Fulladdad' : 'Laddar...' :
-                        'Åker hem...'
+                    return this.isCharging
+                        ? this.rvc.battery === 100
+                            ? null
+                            : 'Laddar...'
+                        : 'Åker hem...';
                 default:
                     return '';
             }
@@ -78,24 +116,24 @@ export default {
         },
         mode() {
             return this.rvc.mode;
-        }
+        },
     },
     methods: {
         async toggle(action) {
             console.log({ action });
             await updateRvc({ mode: action });
-            this.$store.dispatch('update');
+            this.$store.dispatch('updateRvc');
         },
         async onSuctionChange(newLevel, level) {
             if (level != null) {
                 await updateRvc({ suction: newLevel });
-                this.$store.dispatch('update');
+                this.$store.dispatch('updateRvc');
             }
         }
     },
     watch: {
-        'suction': 'onSuctionChange'
-    }
+        suction: 'onSuctionChange'
+    },
 };
 </script>
 
@@ -131,7 +169,7 @@ export default {
 .rvc-details {
     margin-top: 20px;
     width: 100%;
-    font-size: 20px
+    font-size: 20px;
 }
 
 .time-lock {
@@ -173,7 +211,7 @@ body {
     font-family: roboto;
 }
 
-input[type=radio] {
+input[type='radio'] {
     position: absolute;
     visibility: hidden;
     display: none;
@@ -187,12 +225,12 @@ label {
     padding: 5px 13px;
 }
 
-input[type=radio]:checked+label {
+input[type='radio']:checked + label {
     color: #ccc8ce;
     background: #675f6b;
 }
 
-label+input[type=radio]+label {
+label + input[type='radio'] + label {
     border-left: solid 3px #675f6b;
 }
 
@@ -212,7 +250,7 @@ label+input[type=radio]+label {
         width: 100%;
     }
     .image {
-        height: 130px
+        height: 130px;
     }
 }
 </style>
