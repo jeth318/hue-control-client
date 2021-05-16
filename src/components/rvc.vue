@@ -7,10 +7,12 @@
                 </div>
             </v-img>
             <div class="actions">
-                <div v-if="closed" class="lock-wrapper">
-                    <img class="time-lock" src="/time_lock.png" />
+                <div class="lock-and-text-wrapper">
+                    <div v-if="closed" class="lock-wrapper">
+                        <img class="time-lock" src="/time_lock.png" />
+                    </div>
+                    <div class="time-lock-text" v-if="closed">Tidslås aktivt. Låser upp igen klockan 09:00.</div>
                 </div>
-                <div v-if="closed">Aktiveras igen klockan 09:00.</div>
                 <v-btn
                     class="action-item success"
                     :disabled="mode === 'smart' || closed"
@@ -129,10 +131,10 @@ export default {
                 await updateRvc({ suction: newLevel });
                 this.$store.dispatch('updateRvc');
             }
-        }
+        },
     },
     watch: {
-        suction: 'onSuctionChange'
+        suction: 'onSuctionChange',
     },
 };
 </script>
@@ -181,7 +183,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
 }
 
 .switch {
@@ -202,6 +203,17 @@ export default {
     margin: 0;
     padding: 0;
 }
+
+.lock-and-text-wrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.time-lock-text {
+    width: 50%;
+}
+
 
 /** CUSTOM  */
 
