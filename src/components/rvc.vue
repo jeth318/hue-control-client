@@ -11,7 +11,7 @@
                     <img class="time-lock" src="/time_lock.png" />
                 </div>
                 <div v-if="closed">Aktiveras igen klockan 09:00.</div>
-                <v-btn class="action-item success" :disabled="mode === 'smart'" @click="toggle('smart')">STÄDA</v-btn>
+                <v-btn class="action-item success" :disabled="mode === 'smart' || closed" @click="toggle('smart')">STÄDA</v-btn>
                 <v-btn class="action-item warning" :disabled="mode === 'standby' || (mode ==='chargego' && rvc.charging)" @click="toggle('standby')">PAUSA</v-btn>
                 <v-btn class="action-item primary" :disabled="isCharging || mode === 'chargego'" @click="toggle('chargego')">LADDA</v-btn>
                 <div class="suction-settings">
