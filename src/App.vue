@@ -2,18 +2,16 @@
     <v-app dark>
         <div class="app-grid">
             <div v-if="hasFetchedAllData" class="groups-container">
-                <light-group
-                    v-for="(value, index) in groups"
-                    :key="index"
-                    :group-id="index"
-                ></light-group>
+                <light-group v-for="(value, index) in groups" :key="index" :group-id="index"></light-group>
                 <rvc></rvc>
             </div>
             <div v-else>Loading...</div>
         </div>
         <div v-if="!isAppleDevice" class="toggle-button-wrapper">
-                <button class="toggle-button" @click="toggleFullScreen">{{ fullScreen ? 'Exit fullscreen' : 'Go fullscreen' }}</button>
-            </div>
+            <button class="toggle-button" @click="toggleFullScreen">
+                {{ fullScreen ? 'Exit fullscreen' : 'Go fullscreen' }}
+            </button>
+        </div>
     </v-app>
 </template>
 
@@ -40,19 +38,22 @@ export default {
     computed: {
         ...mapGetters(['groups', 'hasFetchedAllData']),
         isAppleDevice() {
-            return ['iPhone', 'iPad', 'iPod']
-                .filter(device => navigator.userAgent.includes(device))
-                .length > 0;
-        }
+            return (
+                ['iPhone', 'iPad', 'iPod'].filter((device) =>
+                    navigator.userAgent.includes(device)
+                ).length > 0
+            );
+        },
     },
     methods: {
         toggleFullScreen() {
             this.fullScreen = !this.fullScreen;
             toggleFullScreen();
-        }
-    }
+        },
+    },
 };
 </script>
+
 <style lang="css" scoped>
 .app-grid {
     width: 100%;

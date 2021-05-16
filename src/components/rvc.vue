@@ -7,16 +7,25 @@
                 </div>
             </v-img>
             <div class="actions">
-                <div v-if="!closed" class="switch-wrapper">
-                    <v-switch @change="toggle({ 'mode': `${isActive ? 'smart' : 'chargego'}` })" v-model="isActive"></v-switch>
-                </div>
-                <div v-else class="lock-wrapper">
+                <div v-if="closed" class="lock-wrapper">
                     <img class="time-lock" src="/time_lock.png" />
                 </div>
                 <div v-if="closed">Aktiveras igen klockan 09:00.</div>
-                <v-btn class="action-item" :disabled="!inMotion" :class="{ warning: true }" @click="toggle({ 'mode': 'standby' })">PAUSA</v-btn>
-                <v-btn class="action-item" :disabled="isCharging || rvc.mode === 'chargego'" :class="{ primary: true }" @click="toggle({ 'mode': 'chargego' })">LADDA</v-btn>
+                <v-btn class="action-item success" :disabled="mode === 'smart'" @click="toggle('smart')">STÄDA</v-btn>
+                <v-btn class="action-item warning" :disabled="mode === 'standby' || (mode ==='chargego' && rvc.charging)" @click="toggle('standby')">PAUSA</v-btn>
+                <v-btn class="action-item primary" :disabled="isCharging || mode === 'chargego'" @click="toggle('chargego')">LADDA</v-btn>
+                <div class="suction-settings">
+                    <div class="radio-group">
+                        <input type="radio" id="option-one" v-model="suction" value="mute">
+                        <label for="option-one">Svag</label>
+                        <input type="radio" id="option-two" v-model="suction" value="normal">
+                        <label for="option-two">Normal</label>
+                        <input type="radio" id="option-three" v-model="suction" value="strong">
+                        <label for="option-three">Stark</label>
+                    </div>
+                </div>
                 <div class="rvc-details">
+                    <p>⚙️ {{ currentModeText }}</p>
                     <p>🔋 Batteri: {{ rvc.battery }}%</p>
                     <p v-if="isCharging">🏠 Dockad</p>
                 </div>
@@ -34,10 +43,12 @@ export default {
     name: 'rvc',
     data: () => ({
         isActive: false,
-        closed: false
+        closed: false,
+        suction: null
     }),
     created() {
         initializeCronJobs(this);
+        this.suction = this.rvc.suction || 'normal';
         this.closed = isOutsideOperationalHours;
     },
     computed: {
@@ -45,25 +56,45 @@ export default {
         imageUrl() {
             return '/rvc.jpg';
         },
+        currentModeText() {
+            switch (this.mode) {
+                case 'smart':
+                    return 'Städar...'
+                case 'standby':
+                    return 'Pausad'
+                case 'chargego':
+                    return this.isCharging ?
+                        this.rvc.battery === 100 ? 'Fulladdad' : 'Laddar...' :
+                        'Åker hem...'
+                default:
+                    return '';
+            }
+        },
         isCharging() {
             return this.rvc.charging;
         },
         inMotion() {
             return this.rvc.inMotion;
+        },
+        mode() {
+            return this.rvc.mode;
         }
     },
     methods: {
-        async toggle(data) {
-            console.log( { data });
-            await updateRvc(data);
+        async toggle(action) {
+            console.log({ action });
+            await updateRvc({ mode: action });
             this.$store.dispatch('update');
         },
-        onRvcModeState(mode) {
-            this.isActive = (mode != 'chargego' && mode !== 'standby');
+        async onSuctionChange(newLevel, level) {
+            if (level != null) {
+                await updateRvc({ suction: newLevel });
+                this.$store.dispatch('update');
+            }
         }
     },
     watch: {
-        'rvc.mode': 'onRvcModeState'
+        'suction': 'onSuctionChange'
     }
 };
 </script>
@@ -108,18 +139,69 @@ export default {
     height: 60px;
 }
 
-.switch-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-
 .lock-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.switch {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.suction-settings {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+.suction-heading {
+    margin: 0;
+    padding: 0;
+}
+
+/** CUSTOM  */
+
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+body {
+    background: #332f35;
+    font-family: roboto;
+}
+
+input[type=radio] {
+    position: absolute;
+    visibility: hidden;
+    display: none;
+}
+
+label {
+    color: #9a929e;
+    display: inline-block;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 5px 13px;
+}
+
+input[type=radio]:checked+label {
+    color: #ccc8ce;
+    background: #675f6b;
+}
+
+label+input[type=radio]+label {
+    border-left: solid 3px #675f6b;
+}
+
+.radio-group {
+    border: solid 3px #675f6b;
+    display: inline-block;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 @media only screen and (max-width: 600px) {
