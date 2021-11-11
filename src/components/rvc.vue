@@ -6,7 +6,10 @@
                     <v-card-title>Dammsugare</v-card-title>
                 </div>
             </v-img>
-            <div class="actions">
+            <div v-if="rvc.error">
+                Cannot establish connection to the vacuum cleaner. Try refreshing the page.
+            </div>
+            <div v-else class="actions">
                 <div class="lock-and-text-wrapper">
                     <div v-if="closed" class="lock-wrapper">
                         <img class="time-lock" src="/time_lock.png" />

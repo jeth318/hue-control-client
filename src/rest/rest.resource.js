@@ -3,12 +3,17 @@ import { baseUrl, endpoints, baseUrlRvc } from './rest.config.js';
 const { LIGHTS, GROUPS, STATE, RVC_API } = endpoints;
 
 export const fetchRvcData = async () => {
-    const { data } = await fetchRvc();
-    return data;
+    try {
+        const { data } = await fetchRvc();
+        return data;
+    } catch (error) {
+        console.log('OOOOPS', error);
+        return { error: true, message: error };
+    }
 }
 
 export const fetchRvc = async () =>
-    await axios({ url: `${baseUrlRvc}/${RVC_API}` });
+    await axios({ url: `${baseUrlRvc}/${RVC_API}`, timeout: 2000 });
 
 export const fetchHueData = async () => {
     const response = await Promise.all([fetchAllGroups(), fetchAllLights()]);
@@ -45,6 +50,7 @@ export const setBrightness = async (lightId, brightness) =>
 
 export const updateRvc = async data =>
     await axios({
+        timeout: 2000,
         url: `${baseUrlRvc}/${RVC_API}`,
         method: 'POST',
         data
