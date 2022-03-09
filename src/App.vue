@@ -34,7 +34,6 @@ export default {
     mounted() {
         setInterval(() => {
             this.$store.dispatch('updateLights');
-            this.$store.dispatch('updateRvc');
         }, 10000);
     },
     computed: {

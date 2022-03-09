@@ -7,18 +7,21 @@
                 </div>
             </v-img>
             <div v-if="rvc.error">
-                Cannot establish connection to the vacuum cleaner. Try refreshing the page.
+                Cannot establish connection to the vacuum cleaner. Try
+                refreshing the page.
             </div>
             <div v-else class="actions">
-                <div class="lock-and-text-wrapper">
-                    <div v-if="closed" class="lock-wrapper">
+                <div v-if="closed" class="lock-and-text-wrapper">
+                    <div class="lock-wrapper">
                         <img class="time-lock" src="/time_lock.png" />
                     </div>
-                    <div class="time-lock-text" v-if="closed">Tidslås aktivt. Låser upp igen klockan 09:00.</div>
+                    <div class="time-lock-text">
+                        Tidslås aktivt. Låser upp igen klockan 09:00.
+                    </div>
                 </div>
                 <v-btn
                     class="action-item success"
-                    :disabled="mode === 'smart' || closed"
+                    :disabled="mode === 'smart'"
                     @click="toggle('smart')"
                     >STÄDA</v-btn
                 >
@@ -42,21 +45,21 @@
                         <input
                             type="radio"
                             id="option-one"
-                            v-model="suction"
+                            v-model="internalSuction"
                             value="mute"
                         />
                         <label for="option-one">Svag</label>
                         <input
                             type="radio"
                             id="option-two"
-                            v-model="suction"
+                            v-model="internalSuction"
                             value="normal"
                         />
                         <label for="option-two">Normal</label>
                         <input
                             type="radio"
                             id="option-three"
-                            v-model="suction"
+                            v-model="internalSuction"
                             value="strong"
                         />
                         <label for="option-three">Stark</label>
@@ -85,11 +88,12 @@ export default {
     data: () => ({
         isActive: false,
         closed: false,
-        suction: null,
+        internalSuction: null,
+        pollingFunction: null,
     }),
     created() {
         initializeCronJobs(this);
-        this.suction = this.rvc.suction || 'normal';
+        this.internalSuction = this.rvc.suction || 'normal';
         this.closed = isOutsideOperationalHours;
     },
     computed: {
@@ -116,6 +120,9 @@ export default {
         isCharging() {
             return this.rvc.charging;
         },
+        isFullyCharged() {
+            return this.rvc.battery === 100;
+        },
         inMotion() {
             return this.rvc.inMotion;
         },
@@ -129,15 +136,37 @@ export default {
             await updateRvc({ mode: action });
             this.$store.dispatch('updateRvc');
         },
-        async onSuctionChange(newLevel, level) {
-            if (level != null) {
+        async onInternalSuctionChange(newLevel, level) {
+            console.log({ newLevel, level });
+            if (level != null && newLevel !== level) {
                 await updateRvc({ suction: newLevel });
                 this.$store.dispatch('updateRvc');
             }
         },
+        async onIsChargingChange(isCharging, previousState) {
+            clearInterval(this.pollingFunction);
+            console.log({ isCharging, previousState });
+            if (previousState === null || (isCharging && this.isFullyCharged)) {
+                console.log('Will stop');
+                return;
+            }
+            console.log('POLL');
+            console.log('batt', this.rvc.battery);
+            this.pollingFunction = setInterval(async () => {
+                if (!isCharging || (isCharging && this.rvc.battery < 100)) {
+                    console.log('will poll');
+                    this.$store.dispatch('updateRvc');
+                }
+            }, 3000);
+            this.$store.dispatch('updateRvc');
+        },
     },
     watch: {
-        suction: 'onSuctionChange',
+        internalSuction: 'onInternalSuctionChange',
+        isCharging: {
+            immediate: true,
+            handler: 'onIsChargingChange',
+        },
     },
 };
 </script>
@@ -216,7 +245,6 @@ export default {
 .time-lock-text {
     width: 50%;
 }
-
 
 /** CUSTOM  */
 
