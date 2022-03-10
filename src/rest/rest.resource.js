@@ -1,6 +1,19 @@
 import axios from 'axios';
 import { baseUrl, endpoints } from './rest.config.js';
-const { LIGHTS, GROUPS, STATE, RVC_API } = endpoints;
+const { LIGHTS, GROUPS, STATE, RVC_API, TV } = endpoints;
+
+export const fetchTvData = async () => {
+    try {
+        const { data } = await fetchTv();
+        return data;
+    } catch (error) {
+        console.log('OOOOPS', error);
+        return { error: true, message: error };
+    }
+};
+
+export const fetchTv = async () =>
+    await axios({ url: `${baseUrl}/${TV}/power`, timeout: 10000 });
 
 export const fetchRvcData = async () => {
     try {
@@ -56,4 +69,12 @@ export const updateRvc = async (data) =>
         url: `${baseUrl}/${RVC_API}`,
         method: 'POST',
         data,
+    });
+
+export const updateTv = async () =>
+    await axios({
+        timeout: 2000,
+        url: `${baseUrl}/${TV}/ircc`,
+        method: 'POST',
+        data: { code: 'AAAAAQAAAAEAAAAVAw==' },
     });

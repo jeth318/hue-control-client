@@ -2,15 +2,20 @@
     <v-app dark>
         <div class="app-grid">
             <div v-if="hasFetchedAllData" class="groups-container">
-                <light-group v-for="(value, index) in groups" :key="index" :group-id="index"></light-group>
+                <light-group
+                    v-for="(value, index) in groups"
+                    :key="index"
+                    :group-id="index"
+                ></light-group>
+                <tv></tv>
                 <rvc></rvc>
             </div>
             <div v-else>Loading...</div>
         </div>
         <div v-if="!isAppleDevice" class="toggle-button-wrapper">
             <button class="toggle-button" @click="toggleFullScreen">
-                    {{ fullScreen ? 'Exit fullscreen' : 'Go fullscreen' }}
-                </button>
+                {{ fullScreen ? 'Exit fullscreen' : 'Go fullscreen' }}
+            </button>
         </div>
     </v-app>
 </template>
@@ -20,16 +25,18 @@ import LightGroup from './components/light-group.vue';
 import { toggleFullScreen } from './utils/window-util';
 import { mapGetters } from 'vuex';
 import Rvc from './components/rvc.vue';
+import Tv from './components/tv.vue';
 
 export default {
     name: 'App',
     data: () => ({
-        fullScreen: false
+        fullScreen: false,
     }),
-    components: { LightGroup, Rvc },
+    components: { LightGroup, Rvc, Tv },
     created() {
         this.$store.dispatch('updateLights');
         this.$store.dispatch('updateRvc');
+        this.$store.dispatch('updateTv');
     },
     mounted() {
         setInterval(() => {
