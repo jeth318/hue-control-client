@@ -3,7 +3,7 @@
         <v-card class="card mx-auto card">
             <v-img class="image white--text align-end" :src="imageUrl">
                 <div class="name-wrapper">
-                    <v-card-title>Sony TV</v-card-title>
+                    <v-card-title>TV</v-card-title>
                 </div>
             </v-img>
             <div v-if="tv.error">
