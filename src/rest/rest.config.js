@@ -1,6 +1,3 @@
-import { config } from 'dotenv';
-config();
-
 const isLocalDev = location.origin.includes('localhost');
 const host = isLocalDev ? 'iot.jtdev.se' : process.env.VUE_APP_API_HOST;
 

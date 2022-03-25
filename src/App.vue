@@ -22,7 +22,7 @@
 
 <script>
 import LightGroup from './components/light-group.vue';
-import { toggleFullScreen } from './utils/window-util';
+import toggleFullScreen from './utils/window-util';
 import { mapGetters } from 'vuex';
 import Rvc from './components/rvc.vue';
 import Tv from './components/tv.vue';

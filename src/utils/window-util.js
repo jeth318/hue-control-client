@@ -25,4 +25,4 @@ const toggleFullScreen = () => {
     }
 };
 
-module.exports = { toggleFullScreen };
+export default { toggleFullScreen };
