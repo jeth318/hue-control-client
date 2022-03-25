@@ -2,15 +2,10 @@
 
 node node_modules/git-branch-is/bin/git-branch-is.js -q main
 if [[ $? == 0 ]]; then
-    read -r -p "Wanna build and deploy? [y/N] " response
-    
-    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]] ; then
-        npm run build
-        echo "Shipping dist to server"
-        rsync -arvz -e 'ssh -p 2244' --progress $(pwd)/dist/ jeth@10.0.128.110:/home/jeth/apps/home-control/client
-    else
-        echo "Skipping build and deploy"
-    fi
+    echo "On main branch. Will build and ship to server"
+    npm run build
+    echo "Shipping dist to server"
+    rsync -arvz -e 'ssh -p 2244' --progress $(pwd)/dist/ jeth@10.0.128.110:/home/jeth/apps/home-control/client
 else
     echo "Not on main branch. Skipping build and deploy."
 fi
