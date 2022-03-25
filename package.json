@@ -28,6 +28,7 @@
     "eslint": "8.11.0",
     "eslint-plugin-vue": "8.5.0",
     "fs": "^0.0.1-security",
+    "git-branch-is": "^4.0.0",
     "husky": "7.0.4",
     "sass": "1.49.9",
     "sass-loader": "12.6.0",
