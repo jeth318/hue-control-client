@@ -1,5 +1,5 @@
 const isLocalDev = location.origin.includes('localhost');
-const host = isLocalDev ? 'http' : 'iot.jtdev.se';
+const host = isLocalDev ? 'http' : process.env.VUE_APP_API_HOST;
 
 const protocol = isLocalDev ? 'http' : 'https';
 
