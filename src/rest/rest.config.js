@@ -1,7 +1,7 @@
 const isLocalDev = location.origin.includes('localhost');
-const host = isLocalDev ? 'iot.jtdev.se' : process.env.VUE_APP_API_HOST;
+const host = isLocalDev ? 'http' : 'iot.jtdev.se';
 
-const protocol = process.env.VUE_APP_PROTOCOL;
+const protocol = isLocalDev ? 'http' : 'https';
 
 export const baseUrl = `${protocol}://${host}`;
 export const endpoints = {
