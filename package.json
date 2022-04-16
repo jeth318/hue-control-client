@@ -3,9 +3,13 @@
   "version": "2.0.0",
   "private": true,
   "type": "module",
+  "simple-git-hooks": {
+    "pre-push": "./deploy.sh"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "postinstall": "rm -rf .git/hooks/ && npx simple-git-hooks"
   },
   "dependencies": {
     "axios": "0.26.1",
@@ -29,9 +33,9 @@
     "eslint-plugin-vue": "8.5.0",
     "fs": "^0.0.1-security",
     "git-branch-is": "^4.0.0",
-    "husky": "7.0.4",
     "sass": "1.49.9",
     "sass-loader": "12.6.0",
+    "simple-git-hooks": "^2.7.0",
     "vue-cli-plugin-vuetify": "2.4.8",
     "vue-template-compiler": "2.6.14",
     "vuetify-loader": "1.7.3"

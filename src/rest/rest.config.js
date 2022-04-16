@@ -1,13 +1,13 @@
 const isLocalDev = location.origin.includes('localhost');
-const host = isLocalDev ? 'http' : process.env.VUE_APP_API_HOST;
 
-const protocol = isLocalDev ? 'http' : 'https';
-
-export const baseUrl = `${protocol}://${host}`;
+const protocol = 'http'
+const hostAddress = process.env.VUE_APP_HOST
+console.log({ protocol, hostAddress });
+export const baseUrl = `${protocol}://${hostAddress}`;
 export const endpoints = {
-    LIGHTS: 'hue/lights',
-    GROUPS: 'hue/groups',
-    STATE: 'hue/state',
-    RVC_API: 'rvc/state',
-    TV: 'tv',
+    LIGHTS: 'iot/hue/lights',
+    GROUPS: 'iot/hue/groups',
+    STATE: 'iot/hue/state',
+    RVC_API: 'iot/rvc/state',
+    TV: 'iot/tv',
 };

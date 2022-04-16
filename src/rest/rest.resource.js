@@ -2,6 +2,14 @@ import axios from 'axios';
 import { baseUrl, endpoints } from './rest.config.js';
 const { LIGHTS, GROUPS, STATE, RVC_API, TV } = endpoints;
 
+const buildRequest = (method, url) => {
+    return {
+        url,
+        timeout: 10000,
+        method
+    }
+}
+
 export const fetchTvData = async () => {
     try {
         const { data } = await fetchTv();
@@ -13,7 +21,8 @@ export const fetchTvData = async () => {
 };
 
 export const fetchTv = async () =>
-    await axios({ url: `${baseUrl}/${TV}/power`, timeout: 10000 });
+    await axios(buildRequest('GET', `${baseUrl}/${TV}/power`));
+
 
 export const fetchRvcData = async () => {
     try {
@@ -26,7 +35,8 @@ export const fetchRvcData = async () => {
 };
 
 export const fetchRvc = async () =>
-    await axios({ url: `${baseUrl}/${RVC_API}`, timeout: 2000 });
+    await axios(buildRequest('GET', `${baseUrl}/${RVC_API}`));
+   
 
 export const fetchHueData = async () => {
     const response = await Promise.all([fetchAllGroups(), fetchAllLights()]);
@@ -34,17 +44,15 @@ export const fetchHueData = async () => {
 };
 
 export const fetchAllLights = async () =>
-    await axios({ url: `${baseUrl}/${LIGHTS}` });
+    await axios(buildRequest('GET', `${baseUrl}/${LIGHTS}`));
 
 export const fetchAllGroups = async () =>
     await axios({ url: `${baseUrl}/${GROUPS}` });
 
 export const toggleLight = async (lightId, light) => {
-    return await axios({
-        url: `${baseUrl}/${LIGHTS}/${lightId}`,
-        method: 'PUT',
-        data: { on: !light.state.on },
-    });
+    const config = buildRequest('PUT', `${baseUrl}/${LIGHTS}/${lightId}`);
+    config.data = { on: !light.state.on }; 
+    return await axios(config);
 };
 
 export const toggleGroup = async (group, lights) => {
@@ -56,25 +64,20 @@ export const toggleGroup = async (group, lights) => {
     );
 };
 
-export const setBrightness = async (lightId, brightness) =>
-    await axios({
-        url: `${baseUrl}/${LIGHTS}/${lightId}`,
-        method: 'PUT',
-        data: { bri: brightness },
-    });
+export const setBrightness = async (lightId, brightness) => {
+    const config = buildRequest('PUT', `${baseUrl}/${LIGHTS}/${lightId}`);
+    config.data = { bri: brightness }; 
+    await axios(config);
+}
 
-export const updateRvc = async (data) =>
-    await axios({
-        timeout: 2000,
-        url: `${baseUrl}/${RVC_API}`,
-        method: 'POST',
-        data,
-    });
+export const updateRvc = async (data) => {
+    const config = buildRequest('POST', `${baseUrl}/${RVC_API}`);
+    config.data = data;
+    await axios(config);
+}
 
-export const updateTv = async () =>
-    await axios({
-        timeout: 2000,
-        url: `${baseUrl}/${TV}/ircc`,
-        method: 'POST',
-        data: { code: 'AAAAAQAAAAEAAAAVAw==' },
-    });
+export const updateTv = async () => {
+    const config = buildRequest('POST', `${baseUrl}/${TV}/ircc`)
+    config.data = { code: 'AAAAAQAAAAEAAAAVAw==' }; 
+    await axios(config);
+}

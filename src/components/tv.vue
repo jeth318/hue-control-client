@@ -50,7 +50,7 @@ export default {
     computed: {
         ...mapGetters(['tv']),
         imageUrl() {
-            return '/tv.jpeg';
+            return '/homecontrol/tv.jpeg';
         },
         active() {
             return this.tv.active;

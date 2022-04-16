@@ -99,7 +99,7 @@ export default {
     computed: {
         ...mapGetters(['rvc']),
         imageUrl() {
-            return '/rvc.jpg';
+            return '/homecontrol/rvc.jpg';
         },
         currentModeText() {
             switch (this.mode) {

@@ -1,7 +1,7 @@
 <template>
     <div class="group">
         <v-card class="card mx-auto card">
-            <v-img class="image white--text align-end" :src="imageUrl">
+            <v-img class="image white--text align-end" :src="`/homecontrol${imageUrl}`">
                 <div class="name-wrapper">
                     <v-card-title>{{ group.name }}</v-card-title>
                 </div>
