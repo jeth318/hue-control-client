@@ -57,8 +57,7 @@ export default new Vuex.Store({
         hasFetchedAllData: (state) => {
             return (
                 !isEmpty(state.groups) &&
-                !isEmpty(state.lights) &&
-                !isEmpty(state.rvc)
+                !isEmpty(state.lights)
             );
         },
     },

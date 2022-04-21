@@ -29,3 +29,19 @@ export default {
     },
 };
 </script>
+<style lang="css">
+
+.v-slider__thumb {
+    height: 28px !important;
+    width: 28px !important;
+}
+.v-slider--horizontal {
+    min-height: 40px;
+}
+.v-slider--horizontal .v-slider__track-container {
+    height: 4px !important;
+}
+button.light-button {
+    margin-bottom: 10px;
+}
+</style>

@@ -3,19 +3,12 @@
         <div class="app-grid">
             <div v-if="hasFetchedAllData" class="groups-container">
                 <light-group
-                    v-for="(value, index) in groups"
+                    v-for="(group, index) in groupsSorted"
                     :key="index"
-                    :group-id="index"
+                    :group-id="group.id"
                 ></light-group>
-                <tv></tv>
-                <rvc></rvc>
             </div>
             <div v-else>Loading...</div>
-        </div>
-        <div v-if="!isAppleDevice" class="toggle-button-wrapper">
-            <button class="toggle-button" @click="toggleFullScreen">
-                {{ fullScreen ? 'Exit fullscreen' : 'Go fullscreen' }}
-            </button>
         </div>
     </v-app>
 </template>
@@ -35,7 +28,7 @@ export default {
     components: { LightGroup, Rvc, Tv },
     created() {
         this.$store.dispatch('updateLights');
-        this.$store.dispatch('updateRvc');
+        //this.$store.dispatch('updateRvc');
         this.$store.dispatch('updateTv');
     },
     mounted() {
@@ -45,6 +38,24 @@ export default {
     },
     computed: {
         ...mapGetters(['groups', 'hasFetchedAllData']),
+        groupsSorted() {
+            const sortOrder = {
+                'Vardagsrum': 1,
+                'Kök': 2,
+                'Badrum': 3,
+                'Hallen': 4,
+            };
+
+            // Vardagsrum = id 1
+            // Badrum = id 2
+            // Kök = id 3
+            // Hallen = id 5
+
+            return Object.keys(this.groups)
+                .map(key => ({...this.groups[key], id: key }))
+                .sort((a, b) => sortOrder[a.name] - sortOrder[b.name], [])
+
+        },
         isAppleDevice() {
             return (
                 ['iPhone', 'iPad', 'iPod'].filter((device) =>
@@ -81,4 +92,30 @@ export default {
     justify-content: center;
     align-items: center;
 }
+
+
+
+#canvas {
+    position: relative;
+    width: 50%;
+}   
+#canvas2 {
+    width: 50%;
+    position: relative;
+}
+
+@media only screen and (max-width: 600px) {
+  #canvas {
+    width: 100%;
+    position: unset;
+    opacity: unset;
+  }
+
+    #canvas2 {
+    width: 100%;
+    position: unset;
+    opacity: unset;
+  }
+}
+
 </style>

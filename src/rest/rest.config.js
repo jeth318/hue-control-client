@@ -2,7 +2,7 @@ const isLocalDev = location.origin.includes('localhost');
 
 const protocol = 'http'
 const hostAddress = process.env.VUE_APP_HOST
-console.log({ protocol, hostAddress });
+export const tapoRelayAddress = process.env.VUE_APP_TAPO_RELAY_ADDRESS
 export const baseUrl = `${protocol}://${hostAddress}`;
 export const endpoints = {
     LIGHTS: 'iot/hue/lights',

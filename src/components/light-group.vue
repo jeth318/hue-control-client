@@ -1,11 +1,12 @@
 <template>
     <div class="group">
         <v-card class="card mx-auto card">
-            <v-img class="image white--text align-end" :src="`/homecontrol${imageUrl}`">
-                <div class="name-wrapper">
-                    <v-card-title>{{ group.name }}</v-card-title>
-                </div>
-            </v-img>
+            <div class="name-wrapper">
+                <v-card-title>{{ group.name }}</v-card-title>
+            </div>
+                <v-img v-if="imageUrl" class="image white--text align-end" :src="`/homecontrol${imageUrl}`" />
+                <camera v-if="group.name === 'Vardagsrum'" id="cam1" :hd="highRes" ></camera>
+                <camera v-if="group.name === 'Kök'" id="cam2" :hd="highRes" ></camera>
             <div class="lights">
                 <v-switch @change="toggleGroup" v-model="group.state.any_on"></v-switch>
                 <light v-for="(value, index) in group.lights" :key="index" :light-id="value"></light>
@@ -18,13 +19,17 @@
 import Light from './light.vue';
 import { toggleGroup } from '../rest/rest.resource.js';
 import { mapGetters } from 'vuex';
+import Camera from './camera.vue';
 
 export default {
     name: 'light-group',
-    components: { Light },
+    components: { Camera, Light },
     props: {
         groupId: { type: String },
     },
+    data: () => ({
+        highRes: false
+    }),
     computed: {
         ...mapGetters(['lights', 'groups']),
         group() {
@@ -36,9 +41,9 @@ export default {
         imageUrl() {
             switch (this.group.name) {
                 case 'Vardagsrum':
-                    return '/livingroom.jpeg';
+                    return null;
                 case 'Kök':
-                    return '/kitchen.jpg';
+                    return null;
                 case 'Hallen':
                     return '/hallway.jpg';
                 case 'Badrum':
@@ -52,7 +57,7 @@ export default {
         async toggleGroup() {
             await toggleGroup(this.group, this.lights);
             this.$store.dispatch('updateLights');
-        },
+        }
     },
 };
 </script>
@@ -64,7 +69,15 @@ export default {
 }
 
 .name-wrapper {
+    display: flex;
+    justify-content: space-between;
     background: rgba(0, 0, 0, 0.45);
+}
+
+.hd-toggle-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .lights {
@@ -72,23 +85,43 @@ export default {
 }
 
 .card {
-    width: 214px;
+    width: 294px;
 }
 
 .image {
-    height: 200px;
+    height: 165px;
 }
 
-@media only screen and (max-width: 600px) {
+.theme--dark.v-card {
+    background-color: unset;
+    background: rgba(0, 0, 0, .4);
+}
+
+@media only screen and (max-width: 800px) {
   .group {
     width: 100%;
+    padding-top: unset;
   }
   .card {
       width: 100%;
   }
 
   .image {
-      height: 130px
+      height: 200px
+  }
+}
+
+@media only screen and (min-width: 1480px) {
+  .group {
+    width: 50%;
+    padding-top: unset;
+  }
+  .card {
+      width: 100%;
+  }
+
+  .image {
+      height: 200px
   }
 }
 </style>
