@@ -1,14 +1,17 @@
 <template>
     <v-app dark>
         <div class="app-grid">
+            <automator :enabled="useAutomator" ></automator>
             <div v-if="hasFetchedAllData" class="groups-container">
                 <light-group
                     v-for="(group, index) in groupsSorted"
                     :key="index"
                     :group-id="group.id"
                 ></light-group>
-                <div class="iot-gadgets">
-                
+                <div class="automator-toggle">
+                    <div>automator is {{ useAutomator ? 'enabled' : 'disabled' }} </div>
+                    <v-switch v-model="useAutomator"></v-switch>
+
                 </div>
             </div>
             <div v-else>Loading...</div>
@@ -22,13 +25,15 @@ import toggleFullScreen from './utils/window-util';
 import { mapGetters } from 'vuex';
 import Rvc from './components/rvc.vue';
 import Tv from './components/tv.vue';
+import Automator from './components/automator.vue';
 
 export default {
     name: 'App',
     data: () => ({
         fullScreen: false,
+        useAutomator: true
     }),
-    components: { LightGroup, Rvc, Tv },
+    components: { LightGroup, Rvc, Tv, Automator },
     created() {
         this.$store.dispatch('updateLights');
         //this.$store.dispatch('updateRvc');
@@ -71,7 +76,7 @@ export default {
         toggleFullScreen() {
             this.fullScreen = !this.fullScreen;
             toggleFullScreen();
-        },
+        }
     },
 };
 </script>

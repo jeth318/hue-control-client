@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseUrl, endpoints } from './rest.config.js';
-const { LIGHTS, GROUPS, STATE, RVC_API, TV } = endpoints;
+const { LIGHTS, GROUPS, ROUTER, RVC_API, TV } = endpoints;
 
 const buildRequest = (method, url) => {
     return {
@@ -49,8 +49,9 @@ export const fetchAllLights = async () =>
 export const fetchAllGroups = async () =>
     await axios({ url: `${baseUrl}/${GROUPS}` });
 
-export const toggleLight = async (lightId, light) => {
-    const config = buildRequest('PUT', `${baseUrl}/${LIGHTS}/${lightId}`);
+export const toggleLight = async (light) => {
+    console.log(light);
+    const config = buildRequest('PUT', `${baseUrl}/${LIGHTS}/${light.id}`);
     config.data = { on: !light.state.on }; 
     return await axios(config);
 };
@@ -60,14 +61,14 @@ export const toggleGroup = async (group, lights) => {
         .map((lightId) => ({ ...lights[lightId], id: lightId }))
         .filter((light) => light.state.on === !group.state.any_on);
     await Promise.all(
-        lightsToToggle.map((light) => toggleLight(light.id, light))
+        lightsToToggle.map((light) => toggleLight(light))
     );
 };
 
 export const setBrightness = async (lightId, brightness) => {
     const config = buildRequest('PUT', `${baseUrl}/${LIGHTS}/${lightId}`);
     config.data = { bri: brightness }; 
-    await axios(config);
+    return await axios(config);
 }
 
 export const updateRvc = async (data) => {
@@ -80,4 +81,9 @@ export const updateTv = async () => {
     const config = buildRequest('POST', `${baseUrl}/${TV}/ircc`)
     config.data = { code: 'AAAAAQAAAAEAAAAVAw==' }; 
     await axios(config);
+}
+
+export const getNetworkClients = async () => {
+    const config = buildRequest('GET', `${baseUrl}/${ROUTER}/online-clients`)
+    return axios(config);
 }

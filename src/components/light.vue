@@ -2,6 +2,7 @@
     <div>
         <v-btn class="light-button" :class="{ success: isActive }" @click="toggle">{{ name }}</v-btn>
         <light-slider
+            :key="lightId"
             :is-active="isActive"
             :initial-value="brightness"
             :light="light"
@@ -23,7 +24,7 @@ export default {
     },
     methods: {
         async toggle() {
-            await toggleLight(this.lightId, this.light);
+            await toggleLight({ ...this.light, id: this.lightId });
             this.$store.dispatch('updateLights');
         },
     },

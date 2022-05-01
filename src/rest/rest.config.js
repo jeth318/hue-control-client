@@ -1,5 +1,3 @@
-const isLocalDev = location.origin.includes('localhost');
-
 const protocol = 'http'
 const hostAddress = process.env.VUE_APP_HOST
 export const tapoRelayAddress = process.env.VUE_APP_TAPO_RELAY_ADDRESS
@@ -10,4 +8,5 @@ export const endpoints = {
     STATE: 'iot/hue/state',
     RVC_API: 'iot/rvc/state',
     TV: 'iot/tv',
+    ROUTER: '/router'
 };
