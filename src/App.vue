@@ -7,6 +7,9 @@
                     :key="index"
                     :group-id="group.id"
                 ></light-group>
+                <div class="iot-gadgets">
+                
+                </div>
             </div>
             <div v-else>Loading...</div>
         </div>
@@ -93,29 +96,7 @@ export default {
     align-items: center;
 }
 
-
-
-#canvas {
-    position: relative;
-    width: 50%;
-}   
-#canvas2 {
-    width: 50%;
-    position: relative;
+.iot-gadgets {
+    display: flex;
 }
-
-@media only screen and (max-width: 600px) {
-  #canvas {
-    width: 100%;
-    position: unset;
-    opacity: unset;
-  }
-
-    #canvas2 {
-    width: 100%;
-    position: unset;
-    opacity: unset;
-  }
-}
-
 </style>

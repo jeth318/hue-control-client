@@ -34,13 +34,21 @@ export default {
 .v-slider__thumb {
     height: 28px !important;
     width: 28px !important;
+    left: -14px !important;
+}
+
+.v-slider__thumb:before {
+    top: -5px !important;
+    left: -5px !important;
 }
 .v-slider--horizontal {
     min-height: 40px;
 }
 .v-slider--horizontal .v-slider__track-container {
-    height: 4px !important;
+    height: 
+    4px !important;
 }
+rack-background
 button.light-button {
     margin-bottom: 10px;
 }

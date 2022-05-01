@@ -5,8 +5,6 @@
                 <v-card-title>{{ group.name }}</v-card-title>
             </div>
                 <v-img v-if="imageUrl" class="image white--text align-end" :src="`/homecontrol${imageUrl}`" />
-                <camera v-if="group.name === 'Vardagsrum'" id="cam1" :hd="highRes" ></camera>
-                <camera v-if="group.name === 'Kök'" id="cam2" :hd="highRes" ></camera>
             <div class="lights">
                 <v-switch @change="toggleGroup" v-model="group.state.any_on"></v-switch>
                 <light v-for="(value, index) in group.lights" :key="index" :light-id="value"></light>
@@ -85,7 +83,7 @@ export default {
 }
 
 .card {
-    width: 294px;
+    width: 100%;
 }
 
 .image {

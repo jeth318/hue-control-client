@@ -101,52 +101,6 @@ export default {
     height: 200px;
 }
 
-.rvc-details {
-    margin-top: 20px;
-    width: 100%;
-    font-size: 20px;
-}
-
-.time-lock {
-    width: 60px;
-    height: 60px;
-}
-
-.lock-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.switch {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
-.suction-settings {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 15px;
-}
-
-.suction-heading {
-    margin: 0;
-    padding: 0;
-}
-
-.lock-and-text-wrapper {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.time-lock-text {
-    width: 50%;
-}
-
 /** CUSTOM  */
 
 @import url('https://fonts.googleapis.com/css?family=Roboto');
