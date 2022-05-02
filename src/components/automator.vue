@@ -6,7 +6,7 @@ import { getTimeBasedBrightness, turnOnHallwayOnly, isHallwayLight } from '../ut
 export default {
     name: 'automator',
     props: {
-        enabled: { type: Boolean, required: true }
+        enabled: { type: Boolean, default: false }
     },
     data: () => ({
         onlineClients: [],
