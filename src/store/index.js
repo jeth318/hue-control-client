@@ -4,6 +4,7 @@ import {
     fetchHueData,
     fetchRvcData,
     fetchTvData,
+    getAutomatorState
 } from '../rest/rest.resource.js';
 import { isEmpty } from 'ramda';
 Vue.use(Vuex);
@@ -14,6 +15,7 @@ export default new Vuex.Store({
         lights: {},
         rvc: {},
         tv: {},
+        automator: {}
     },
     mutations: {
         async updateLights(state) {
@@ -29,6 +31,10 @@ export default new Vuex.Store({
             const tvData = await fetchTvData();
             state.tv = tvData;
         },
+        async updateAutomator(state) {
+            const automatorData = await getAutomatorState();
+            state.automator = automatorData;
+        },
     },
     actions: {
         updateLights(ctx) {
@@ -39,6 +45,9 @@ export default new Vuex.Store({
         },
         updateTv(ctx) {
             ctx.commit('updateTv');
+        },
+        updateAutomator(ctx) {
+            ctx.commit('updateAutomator');
         },
     },
     getters: {
@@ -53,6 +62,9 @@ export default new Vuex.Store({
         },
         tv: (state) => {
             return state.tv;
+        },
+        automator: (state) => {
+            return state.automator;
         },
         hasFetchedAllData: (state) => {
             return (

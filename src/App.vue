@@ -26,6 +26,7 @@ import { mapGetters } from 'vuex';
 import Rvc from './components/rvc.vue';
 import Tv from './components/tv.vue';
 import Automator from './components/automator.vue';
+import { setAutomatorState } from './rest/rest.resource';
 
 export default {
     name: 'App',
@@ -35,8 +36,8 @@ export default {
     }),
     components: { LightGroup, Rvc, Tv, Automator },
     created() {
+        this.$store.dispatch('updateAutomator');
         this.$store.dispatch('updateLights');
-        //this.$store.dispatch('updateRvc');
         this.$store.dispatch('updateTv');
     },
     mounted() {
@@ -45,7 +46,7 @@ export default {
         }, 10000);
     },
     computed: {
-        ...mapGetters(['groups', 'hasFetchedAllData']),
+        ...mapGetters(['automator', 'groups', 'hasFetchedAllData']),
         groupsSorted() {
             const sortOrder = {
                 'Vardagsrum': 1,
@@ -76,6 +77,10 @@ export default {
         toggleFullScreen() {
             this.fullScreen = !this.fullScreen;
             toggleFullScreen();
+        },
+        toggleAutomator() {
+            setAutomatorState(!this.$store.automator.active);
+            this.$store.dispatch('updateAutomator')
         }
     },
 };

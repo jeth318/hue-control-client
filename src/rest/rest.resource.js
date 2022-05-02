@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseUrl, endpoints } from './rest.config.js';
-const { LIGHTS, GROUPS, ROUTER, RVC_API, TV } = endpoints;
+const { AUTOMATOR, LIGHTS, GROUPS, ROUTER, RVC_API, TV } = endpoints;
 
 const buildRequest = (method, url) => {
     return {
@@ -86,4 +86,17 @@ export const updateTv = async () => {
 export const getNetworkClients = async () => {
     const config = buildRequest('GET', `${baseUrl}/${ROUTER}/online-clients`)
     return axios(config);
+}
+
+export const getAutomatorState = async () => {
+    const config = buildRequest('GET', `${baseUrl}/${AUTOMATOR}`)
+    const { data } = await axios(config);
+    return data;
+}
+
+export const setAutomatorState = async (payload) => {
+    const config = buildRequest('POST', `${baseUrl}/${AUTOMATOR}`)
+    config.data = { active: payload.active };
+    const { data } = await axios(config);
+    return data;
 }
