@@ -5,7 +5,6 @@
         v-if="hasFetchedAllData"
         class="groups-container"
       >
-        <automator :enabled="internalAutomatorActive"></automator>
         <light-group
           v-for="(group, index) in groupsSorted"
           :key="index"
@@ -30,7 +29,6 @@ import toggleFullScreen from "./utils/window-util";
 import { mapGetters } from "vuex";
 import Rvc from "./components/rvc.vue";
 import Tv from "./components/tv.vue";
-import Automator from "./components/automator.vue";
 import { setAutomatorState } from "./rest/rest.resource";
 
 export default {
@@ -39,7 +37,7 @@ export default {
     fullScreen: false,
     internalAutomatorActive: null,
   }),
-  components: { LightGroup, Rvc, Tv, Automator },
+  components: { LightGroup, Rvc, Tv },
   created() {
     this.$store.dispatch("updateAutomator");
     this.$store.dispatch("updateLights");

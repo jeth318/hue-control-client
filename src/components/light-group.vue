@@ -39,9 +39,9 @@ export default {
         imageUrl() {
             switch (this.group.name) {
                 case 'Vardagsrum':
-                    return null;
+                    return '/livingroom.jpeg';
                 case 'Kök':
-                    return null;
+                    return '/kitchen.jpg';
                 case 'Hallen':
                     return '/hallway.jpg';
                 case 'Badrum':

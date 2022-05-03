@@ -1,5 +1,5 @@
 <template>
-    <v-slider :disabled="!isActive" @change="onSlideEnd" v-model="light.state.bri" :min="0" :max="254"></v-slider>
+    <v-slider thumb-label :thumb-size="35" :disabled="!isActive" @change="onSlideEnd" v-model="light.state.bri" :min="0" :max="254"></v-slider>
 </template>
 
 <script>
@@ -24,25 +24,14 @@ export default {
 </script>
 <style lang="css">
 
-.v-slider__thumb {
-    height: 28px !important;
-    width: 28px !important;
-    left: -14px !important;
-}
-
-.v-slider__thumb:before {
-    top: -5px !important;
-    left: -5px !important;
-}
-.v-slider--horizontal {
-    min-height: 40px;
-}
-.v-slider--horizontal .v-slider__track-container {
-    height: 
-    4px !important;
-}
-rack-background
 button.light-button {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+}
+.v-slider__thumb-container,
+.v-slider__thumb-label {
+    pointer-events: auto !important;
+}
+.v-slider {
+    pointer-events: none !important;
 }
 </style>
