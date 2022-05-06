@@ -11,12 +11,13 @@
           :group-id="group.id"
         ></light-group>
         <div class="automator-toggle">
-          <div>automator is {{ internalAutomatorActive ? "enabled" : "disabled" }}</div>
           <v-switch
+            label="automator"
             v-model="internalAutomatorActive"
             @change="toggleAutomator"
           ></v-switch>
         </div>
+
       </div>
       <div v-else>Loading...</div>
     </div>
@@ -122,5 +123,10 @@ export default {
 
 .iot-gadgets {
   display: flex;
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
 }
 </style>

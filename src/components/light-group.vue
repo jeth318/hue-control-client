@@ -3,8 +3,15 @@
         <v-card class="card mx-auto card">
             <div class="name-wrapper">
                 <v-card-title>{{ group.name }}</v-card-title>
+                <v-switch v-if="group.name === 'Vardagsrum'" label="👀" v-model="cam1Enabled"></v-switch>
+                <v-switch v-if="group.name === 'Kök'" label="👀" v-model="cam2Enabled"></v-switch>
+
             </div>
+            <div class="media-wrapper">
+                <camera v-if="cam1Enabled && group.name === 'Vardagsrum'" :hd="false" id="cam1" ></camera>
+                <camera v-if="cam2Enabled && group.name === 'Kök'" :hd="false" id="cam2" ></camera>
                 <v-img v-if="imageUrl" class="image white--text align-end" :src="`/homecontrol${imageUrl}`" />
+            </div>
             <div class="lights">
                 <v-switch @change="toggleGroup" v-model="group.state.any_on"></v-switch>
                 <light v-for="(value, index) in group.lights" :key="index" :light-id="value"></light>
@@ -23,10 +30,12 @@ export default {
     name: 'light-group',
     components: { Camera, Light },
     props: {
-        groupId: { type: String },
+        groupId: { type: String }
     },
     data: () => ({
-        highRes: false
+        highRes: false,
+        cam1Enabled: false,
+        cam2Enabled: false
     }),
     computed: {
         ...mapGetters(['lights', 'groups']),
@@ -39,9 +48,9 @@ export default {
         imageUrl() {
             switch (this.group.name) {
                 case 'Vardagsrum':
-                    return '/livingroom.jpeg';
+                    return `${this.cam1Enabled ? '' : '/livingroom.jpeg'}`;
                 case 'Kök':
-                    return '/kitchen.jpg';
+                    return `${this.cam2Enabled ? '' : '/kitchen.jpg'}`;
                 case 'Hallen':
                     return '/hallway.jpg';
                 case 'Badrum':
@@ -61,6 +70,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.media-wrapper {
+    min-height: 213px;
+}
 .group {
     border-radius: 5px;
     padding: 10px;

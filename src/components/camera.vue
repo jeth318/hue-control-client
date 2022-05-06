@@ -22,6 +22,10 @@ export default {
             this.mountCamera()
         })
     },
+    destroyed() {
+        console.log('DESTROYED');
+        this.player.destroy()
+    },
     methods: {
         async mountCamera() {
             console.log(`${this.id}-${this.quality}`);
