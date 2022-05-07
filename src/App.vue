@@ -1,5 +1,6 @@
 <template>
   <v-app dark>
+
     <div class="app-grid">
       <div
         v-if="hasFetchedAllData"
@@ -10,14 +11,9 @@
           :key="index"
           :group-id="group.id"
         ></light-group>
-        <div class="automator-toggle">
-          <v-switch
-            label="automator"
-            v-model="internalAutomatorActive"
-            @change="toggleAutomator"
-          ></v-switch>
+        <div class="settings-wrapper">
+          <settings></settings>
         </div>
-
       </div>
       <div v-else>Loading...</div>
     </div>
@@ -26,10 +22,11 @@
 
 <script>
 import LightGroup from "./components/light-group.vue";
+import Settings from './components/settings.vue';
 import toggleFullScreen from "./utils/window-util";
-import { mapGetters } from "vuex";
 import Rvc from "./components/rvc.vue";
 import Tv from "./components/tv.vue";
+import { mapGetters } from "vuex";
 import { setAutomatorState } from "./rest/rest.resource";
 
 export default {
@@ -38,7 +35,7 @@ export default {
     fullScreen: false,
     internalAutomatorActive: null,
   }),
-  components: { LightGroup, Rvc, Tv },
+  components: { LightGroup, Rvc, Tv, Settings },
   created() {
     this.$store.dispatch("updateAutomator");
     this.$store.dispatch("updateLights");
@@ -80,30 +77,23 @@ export default {
     toggleFullScreen() {
       this.fullScreen = !this.fullScreen;
       toggleFullScreen();
-    },
-    onAutomatorStateChanged(prevVal, val) {
-      console.log({ prevVal, val });
-      if (prevVal) {
-        // this.internalAutomatorActive = prevVal.active;
-      }
-    },
-    async toggleAutomator() {
-      await setAutomatorState({ active: this.internalAutomatorActive });
-    },
-  },
-  watch: {
-    hasFetchedAllData: {
-      handler() {
-        this.internalAutomatorActive = this.automator.active;
-      },
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="css" scoped>
 
+.settings-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 15px;
+}
 
+.theme--dark.v-application {
+  background-color: #2B2B2B;
+}
 .app-grid {
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);

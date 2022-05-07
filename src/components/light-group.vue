@@ -114,9 +114,6 @@ export default {
 @media only screen and (max-width: 800px) {
   .group {
     width: 100%;
-    padding-top: unset;
-    padding-left: 0;
-    padding-right: 0;
   }
   .card {
       width: 100%;
