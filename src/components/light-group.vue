@@ -3,8 +3,8 @@
         <v-card class="card mx-auto card">
             <div class="name-wrapper">
                 <v-card-title>{{ group.name }}</v-card-title>
-                <v-switch v-if="group.name === 'Vardagsrum'" label="👀" v-model="cam1Enabled"></v-switch>
-                <v-switch v-if="group.name === 'Kök'" label="👀" v-model="cam2Enabled"></v-switch>
+                <v-switch v-if="group.name === 'Vardagsrum'" class="camera-toggle" label="👀" v-model="cam1Enabled"></v-switch>
+                <v-switch v-if="group.name === 'Kök'" class="camera-toggle" label="👀" v-model="cam2Enabled"></v-switch>
 
             </div>
             <div class="media-wrapper">
@@ -70,6 +70,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
+
+.camera-toggle {
+    padding-right: 5px;
+}
 .media-wrapper {
     min-height: 213px;
 }
@@ -111,6 +115,8 @@ export default {
   .group {
     width: 100%;
     padding-top: unset;
+    padding-left: 0;
+    padding-right: 0;
   }
   .card {
       width: 100%;

@@ -102,7 +102,11 @@ export default {
 </script>
 
 <style lang="css" scoped>
+
+
 .app-grid {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
   width: 100%;
   display: flex;
   justify-content: center;
