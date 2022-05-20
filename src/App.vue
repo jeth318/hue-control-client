@@ -11,6 +11,8 @@
           :key="index"
           :group-id="group.id"
         ></light-group>
+        <rvc></rvc>
+        <tv></tv>
         <div class="settings-wrapper">
           <settings></settings>
         </div>
@@ -27,7 +29,6 @@ import toggleFullScreen from "./utils/window-util";
 import Rvc from "./components/rvc.vue";
 import Tv from "./components/tv.vue";
 import { mapGetters } from "vuex";
-import { setAutomatorState } from "./rest/rest.resource";
 
 export default {
   name: "App",
