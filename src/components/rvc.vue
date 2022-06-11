@@ -13,7 +13,7 @@
             <div v-else class="actions">
                 <div v-if="closed" class="lock-and-text-wrapper">
                     <div class="lock-wrapper">
-                        <img class="time-lock" src="/homecontrol/time_lock.png" />
+                        <img class="time-lock" src="/home-control/time_lock.png" />
                     </div>
                     <div class="time-lock-text">
                         Tidslås aktivt. Låser upp igen klockan 09:00.
@@ -99,7 +99,7 @@ export default {
     computed: {
         ...mapGetters(['rvc']),
         imageUrl() {
-            return '/homecontrol/rvc.jpg';
+            return '/home-control/rvc.jpg';
         },
         currentModeText() {
             switch (this.mode) {

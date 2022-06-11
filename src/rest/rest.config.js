@@ -9,5 +9,5 @@ export const endpoints = {
     RVC_API: 'iot/rvc/state',
     TV: 'iot/tv',
     ROUTER: 'router',
-    AUTOMATOR: '/iot/hue/automator',
+    AUTOMATOR: 'iot/hue/automator',
 };

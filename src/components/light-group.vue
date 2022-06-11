@@ -10,7 +10,7 @@
             <div class="media-wrapper">
                 <camera v-if="cam1Enabled && group.name === 'Vardagsrum'" :hd="false" id="cam1" ></camera>
                 <camera v-if="cam2Enabled && group.name === 'Kök'" :hd="false" id="cam2" ></camera>
-                <v-img v-if="imageUrl" class="image white--text align-end" :src="`/homecontrol${imageUrl}`" />
+                <v-img v-if="imageUrl" class="image white--text align-end" :src="`/home-control${imageUrl}`" />
             </div>
             <div class="lights">
                 <v-switch @change="toggleGroup" v-model="group.state.any_on"></v-switch>

@@ -1,6 +1,6 @@
 module.exports = {
     transpileDependencies: ['vuetify'],
-    publicPath: '/homecontrol',
+    publicPath: '/home-control',
     configureWebpack: {
         resolve: {
             fallback: { path: false, os: false },
