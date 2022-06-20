@@ -12,7 +12,7 @@ export default {
     name: 'camera',
     props: {
         id: { type: String },
-        hd: { type: Boolean, default: false }
+        hd: { type: Boolean, default: true }
     },
     data: () => ({
         player: {}
