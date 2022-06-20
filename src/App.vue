@@ -11,7 +11,6 @@
           :key="index"
           :group-id="group.id"
         ></light-group>
-        <rvc></rvc>
         <tv></tv>
         <div class="settings-wrapper">
           <settings></settings>
@@ -26,7 +25,6 @@
 import LightGroup from "./components/light-group.vue";
 import Settings from './components/settings.vue';
 import toggleFullScreen from "./utils/window-util";
-import Rvc from "./components/rvc.vue";
 import Tv from "./components/tv.vue";
 import { mapGetters } from "vuex";
 
@@ -36,7 +34,7 @@ export default {
     fullScreen: false,
     internalAutomatorActive: null,
   }),
-  components: { LightGroup, Rvc, Tv, Settings },
+  components: { LightGroup, Tv, Settings },
   created() {
     this.$store.dispatch("updateAutomator");
     this.$store.dispatch("updateLights");
