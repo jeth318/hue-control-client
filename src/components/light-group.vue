@@ -8,8 +8,12 @@
 
             </div>
             <div class="media-wrapper">
-                <camera v-if="cam1Enabled && group.name === 'Vardagsrum'" :hd="false" id="cam1" ></camera>
-                <camera v-if="cam2Enabled && group.name === 'Kök'" :hd="false" id="cam2" ></camera>
+            <picture v-if="cam1Enabled && group.name === 'Vardagsrum'">
+                <camera :hd="false" id="cam1" ></camera>
+            </picture>
+            <picture v-if="cam2Enabled && group.name === 'Kök'">
+                <camera :hd="false" id="cam2" ></camera>
+            </picture>
                 <v-img v-if="imageUrl" class="image white--text align-end" :src="`/home-control${imageUrl}`" />
             </div>
             <div class="lights">
@@ -103,7 +107,8 @@ export default {
 }
 
 .image {
-    height: 165px;
+    width: 100%;;
+    width: 290px;
 }
 
 .theme--dark.v-card {
@@ -120,7 +125,8 @@ export default {
   }
 
   .image {
-      height: 200px
+      height: 200px;
+      width: 100%;
   }
 }
 
@@ -134,7 +140,8 @@ export default {
   }
 
   .image {
-      height: 200px
+      height: 200px;
+      width: 290px;
   }
 }
 </style>
