@@ -50,7 +50,6 @@ export const fetchAllGroups = async () =>
     await axios({ url: `${baseUrl}/${GROUPS}` });
 
 export const toggleLight = async (light) => {
-    console.log(light);
     const config = buildRequest('PUT', `${baseUrl}/${LIGHTS}/${light.id}`);
     config.data = { on: !light.state.on }; 
     return await axios(config);
