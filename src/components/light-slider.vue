@@ -45,7 +45,6 @@ export default {
 }
 
 .slider-wrapper .v-slider {
-    pointer-events: none !important;
     margin: 0;
 }
 

@@ -76,8 +76,9 @@ export default {
     cursor: pointer;
     transition: all 0.25s ease;
     outline: none;
-    min-width: 0;
+    width: 120px;
     flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .light-toggle:hover {

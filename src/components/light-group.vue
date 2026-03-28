@@ -1,62 +1,57 @@
 <template>
     <div class="room-card">
-        <v-card class="glass-card" elevation="0">
-            <!-- Room image / camera area -->
-            <div class="media-area">
-                <picture v-if="cam1Enabled && group.name === 'Vardagsrum'">
-                    <camera :hd="false" id="cam1"></camera>
-                </picture>
-                <picture v-else-if="cam2Enabled && group.name === 'Kök'">
-                    <camera :hd="false" id="cam2"></camera>
-                </picture>
-                <div v-else-if="imageUrl" class="room-image" :style="{ backgroundImage: `url(/home-control${imageUrl})` }"></div>
-                <div v-else class="room-image room-image--placeholder">
-                    <v-icon size="48" color="rgba(255,255,255,0.15)">{{ roomIcon }}</v-icon>
-                </div>
-                <!-- Image overlay gradient -->
-                <div class="media-overlay"></div>
-                <!-- Room name overlay -->
-                <div class="room-header">
-                    <span class="room-name">{{ group.name }}</span>
-                    <div class="room-header-actions">
-                        <v-btn
-                            v-if="group.name === 'Vardagsrum'"
-                            icon
-                            small
-                            class="cam-btn"
-                            :class="{ 'cam-btn--active': cam1Enabled }"
-                            @click="cam1Enabled = !cam1Enabled"
-                        >
-                            <v-icon size="18">mdi-cctv</v-icon>
-                        </v-btn>
-                        <v-btn
-                            v-if="group.name === 'Kök'"
-                            icon
-                            small
-                            class="cam-btn"
-                            :class="{ 'cam-btn--active': cam2Enabled }"
-                            @click="cam2Enabled = !cam2Enabled"
-                        >
-                            <v-icon size="18">mdi-cctv</v-icon>
-                        </v-btn>
+        <v-card class="glass-card" elevation="0" :style="cardStyle">
+            <!-- Room header (icon is the toggle) -->
+            <div class="room-header">
+                <div class="room-title-row">
+                    <button
+                        class="room-icon-circle"
+                        :class="{ 'room-icon-circle--on': group.state.any_on }"
+                        @click="toggleGroup"
+                    >
+                        <v-icon size="20" :color="group.state.any_on ? '#F5A623' : 'rgba(232,232,237,0.25)'">{{ roomIcon }}</v-icon>
+                    </button>
+                    <div class="room-title-block">
+                        <span class="room-name">{{ group.name }}</span>
+                        <span class="room-status" :class="{ 'room-status--on': group.state.any_on }">
+                            {{ group.state.any_on ? 'På' : 'Av' }}
+                        </span>
                     </div>
                 </div>
+                <div class="room-header-actions">
+                    <v-btn
+                        v-if="group.name === 'Vardagsrum'"
+                        icon
+                        small
+                        class="cam-btn"
+                        :class="{ 'cam-btn--active': cam1Enabled }"
+                        @click="cam1Enabled = !cam1Enabled"
+                    >
+                        <v-icon size="18">mdi-cctv</v-icon>
+                    </v-btn>
+                    <v-btn
+                        v-if="group.name === 'Kök'"
+                        icon
+                        small
+                        class="cam-btn"
+                        :class="{ 'cam-btn--active': cam2Enabled }"
+                        @click="cam2Enabled = !cam2Enabled"
+                    >
+                        <v-icon size="18">mdi-cctv</v-icon>
+                    </v-btn>
+                </div>
+            </div>
+
+            <!-- Camera feeds (shown when toggled) -->
+            <div v-if="cam1Enabled && group.name === 'Vardagsrum'" class="camera-area">
+                <camera :hd="false" id="cam1"></camera>
+            </div>
+            <div v-if="cam2Enabled && group.name === 'Kök'" class="camera-area">
+                <camera :hd="false" id="cam2"></camera>
             </div>
 
             <!-- Controls area -->
             <div class="controls-area">
-                <!-- Master toggle -->
-                <div class="master-toggle">
-                    <span class="master-label">{{ group.state.any_on ? 'On' : 'Off' }}</span>
-                    <v-switch
-                        @change="toggleGroup"
-                        v-model="group.state.any_on"
-                        color="#F5A623"
-                        hide-details
-                        dense
-                        inset
-                    ></v-switch>
-                </div>
                 <!-- Individual lights -->
                 <div class="lights-list">
                     <light
@@ -104,23 +99,25 @@ export default {
                 default: return 'mdi-lightbulb-group';
             }
         },
-        imageUrl() {
+        roomTint() {
             switch (this.group.name) {
-                case 'Vardagsrum':
-                    return `${this.cam1Enabled ? '' : '/livingroom.jpeg'}`;
-                case 'Kök':
-                    return `${this.cam2Enabled ? '' : '/kitchen.jpg'}`;
-                case 'Hallen':
-                    return '/hallway.jpg';
-                case 'Badrum':
-                    return '/bathroom.jpeg';
-                default:
-                    return '';
+                case 'Vardagsrum': return '245, 166, 35';   // warm amber
+                case 'Kök':        return '96, 165, 250';   // cool blue
+                case 'Badrum':     return '74, 222, 128';   // fresh green
+                case 'Hallen':     return '192, 132, 252';  // soft purple
+                default:           return '255, 255, 255';
             }
+        },
+        cardStyle() {
+            return {
+                background: `linear-gradient(135deg, rgba(${this.roomTint}, 0.15) 0%, rgba(${this.roomTint}, 0.04) 100%)`,
+                borderColor: `rgba(${this.roomTint}, 0.25)`,
+            };
         },
     },
     methods: {
         async toggleGroup() {
+            this.group.state.any_on = !this.group.state.any_on;
             await toggleGroup(this.group, this.lights);
             this.$store.dispatch('updateLights');
         }
@@ -131,58 +128,85 @@ export default {
 <style lang="css" scoped>
 .room-card {
     width: 100%;
-}
-
-/* Media area */
-.media-area {
-    position: relative;
-    border-radius: 20px 20px 0 0;
-    overflow: hidden;
-    min-height: 180px;
-}
-
-.room-image {
-    width: 100%;
-    height: 180px;
-    background-size: cover;
-    background-position: center;
-}
-
-.room-image--placeholder {
+    height: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, rgba(245, 166, 35, 0.08), rgba(15, 15, 26, 0.5));
+    flex-direction: column;
 }
 
-.media-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 80px;
-    background: linear-gradient(transparent, rgba(15, 15, 26, 0.9));
-    pointer-events: none;
+.room-card >>> .v-card {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
-/* Room header (overlaid on image) */
+/* Room header */
 .room-header {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 20px;
-    z-index: 1;
+    padding: 20px 20px 0;
+}
+
+.room-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.room-icon-circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    padding: 0;
+}
+
+.room-icon-circle:hover {
+    background: rgba(245, 166, 35, 0.1);
+    border-color: rgba(245, 166, 35, 0.2);
+}
+
+.room-icon-circle--on {
+    background: rgba(245, 166, 35, 0.15);
+    border-color: rgba(245, 166, 35, 0.35);
+    box-shadow: 0 0 20px rgba(245, 166, 35, 0.15);
+}
+
+.room-icon-circle--on:hover {
+    background: rgba(245, 166, 35, 0.2);
+}
+
+.room-title-block {
+    display: flex;
+    flex-direction: column;
 }
 
 .room-name {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: #E8E8ED;
     letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.room-status {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba(232, 232, 237, 0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.room-status--on {
+    color: #F5A623;
 }
 
 .room-header-actions {
@@ -200,26 +224,17 @@ export default {
     background: rgba(245, 166, 35, 0.12) !important;
 }
 
+/* Camera area */
+.camera-area {
+    padding: 12px 20px 0;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
 /* Controls area */
 .controls-area {
-    padding: 16px 20px 20px;
-}
-
-.master-toggle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 12px;
-    margin-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.master-label {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: rgba(232, 232, 237, 0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    padding: 12px 20px 20px;
+    flex: 1;
 }
 
 /* Lights list */
