@@ -1,30 +1,35 @@
 <template>
-    <div class="group">
-        <v-card class="card mx-auto card">
-            <v-img class="image white--text align-end" :src="imageUrl">
-                <div class="name-wrapper">
-                    <v-card-title>Sony TV</v-card-title>
+    <div class="tv-card">
+        <v-card class="glass-card" elevation="0">
+            <!-- Header area -->
+            <div class="tv-header-area">
+                <div class="tv-icon-circle" :class="{ 'tv-icon-circle--on': internalActive }">
+                    <v-icon size="28" :color="internalActive ? '#F5A623' : 'rgba(232,232,237,0.3)'">mdi-television</v-icon>
                 </div>
-            </v-img>
-            <div v-if="tv.error">
-                Cannot establish connection to the vacuum cleaner. Try
-                refreshing the page.
+                <div class="tv-title-block">
+                    <span class="tv-name">Sony TV</span>
+                    <span class="tv-status" :class="{ 'tv-status--on': internalActive }">
+                        {{ internalActive ? 'På' : 'Av' }}
+                    </span>
+                </div>
             </div>
-            <div v-else class="actions">
-                <v-btn
-                    key="power-on"
-                    v-if="!internalActive"
-                    class="action-item success"
-                    @click="toggle('on')"
-                    >STARTA</v-btn
+
+            <!-- Error -->
+            <div v-if="tv.error" class="tv-error">
+                <v-icon size="20" color="#F87171">mdi-alert-circle-outline</v-icon>
+                <span>Kan inte ansluta till TV:n.</span>
+            </div>
+
+            <!-- Controls -->
+            <div v-else class="tv-controls">
+                <button
+                    class="power-btn"
+                    :class="internalActive ? 'power-btn--off' : 'power-btn--on'"
+                    @click="toggle"
                 >
-                <v-btn
-                    key="power-off"
-                    v-if="internalActive"
-                    class="action-item red"
-                    @click="toggle('off')"
-                    >STÄNG AV</v-btn
-                >
+                    <v-icon size="20">mdi-power</v-icon>
+                    <span>{{ internalActive ? 'Stäng av' : 'Starta' }}</span>
+                </button>
             </div>
         </v-card>
     </div>
@@ -51,7 +56,6 @@ export default {
         ...mapGetters(['tv']),
         imageUrl() {
             return '';
-            //return '';
         },
         active() {
             return this.tv.active;
@@ -74,82 +78,104 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.group {
-    border-radius: 5px;
-    padding: 10px;
+.tv-card {
+    width: 100%;
 }
 
-.name-wrapper {
-    background: rgba(0, 0, 0, 0.45);
+.tv-header-area {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 20px 12px;
 }
 
-.actions {
+.tv-icon-circle {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.tv-icon-circle--on {
+    background: rgba(245, 166, 35, 0.1);
+    border-color: rgba(245, 166, 35, 0.2);
+    box-shadow: 0 0 20px rgba(245, 166, 35, 0.1);
+}
+
+.tv-title-block {
     display: flex;
     flex-direction: column;
-    padding: 10px;
 }
 
-.action-item {
-    margin: 10px;
-    width: 200px;
+.tv-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #E8E8ED;
 }
 
-.card {
-    width: 242px;
+.tv-status {
+    font-size: 0.8rem;
+    color: rgba(232, 232, 237, 0.4);
+    font-weight: 500;
 }
 
-.image {
-    height: 200px;
+.tv-status--on {
+    color: #4ADE80;
 }
 
-/** CUSTOM  */
-
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-body {
-    background: #332f35;
-    font-family: roboto;
+.tv-error {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px 20px;
+    color: #F87171;
+    font-size: 0.85rem;
 }
 
-input[type='radio'] {
-    position: absolute;
-    visibility: hidden;
-    display: none;
+.tv-controls {
+    padding: 8px 20px 24px;
 }
 
-label {
-    color: #9a929e;
-    display: inline-block;
+.power-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.88rem;
+    font-weight: 500;
     cursor: pointer;
-    font-weight: bold;
-    padding: 5px 13px;
+    transition: all 0.25s ease;
+    outline: none;
 }
 
-input[type='radio']:checked + label {
-    color: #ccc8ce;
-    background: #675f6b;
+.power-btn--on {
+    background: rgba(74, 222, 128, 0.1);
+    border-color: rgba(74, 222, 128, 0.25);
+    color: #4ADE80;
 }
 
-label + input[type='radio'] + label {
-    border-left: solid 3px #675f6b;
+.power-btn--on:hover {
+    background: rgba(74, 222, 128, 0.18);
+    transform: translateY(-1px);
 }
 
-.radio-group {
-    border: solid 3px #675f6b;
-    display: inline-block;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    overflow: hidden;
+.power-btn--off {
+    background: rgba(248, 113, 113, 0.1);
+    border-color: rgba(248, 113, 113, 0.25);
+    color: #F87171;
 }
 
-@media only screen and (max-width: 600px) {
-    .group {
-        width: 100%;
-    }
-    .card {
-        width: 100%;
-    }
-    .image {
-        height: 130px;
-    }
+.power-btn--off:hover {
+    background: rgba(248, 113, 113, 0.18);
+    transform: translateY(-1px);
 }
 </style>

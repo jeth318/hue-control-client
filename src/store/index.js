@@ -2,8 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import {
     fetchHueData,
-    fetchRvcData,
-    fetchTvData,
     getAutomatorState
 } from '../rest/rest.resource.js';
 import { isEmpty } from 'ramda';
@@ -13,8 +11,6 @@ export default new Vuex.Store({
     state: {
         groups: {},
         lights: {},
-        rvc: {},
-        tv: {},
         automator: {}
     },
     mutations: {
@@ -22,14 +18,6 @@ export default new Vuex.Store({
             const data = await fetchHueData();
             state.lights = data.lights;
             state.groups = data.groups;
-        },
-        async updateRvc(state) {
-            const rvcData = await fetchRvcData();
-            state.rvc = rvcData;
-        },
-        async updateTv(state) {
-            const tvData = await fetchTvData();
-            state.tv = tvData;
         },
         async updateAutomator(state) {
             const automatorData = await getAutomatorState();
@@ -39,12 +27,6 @@ export default new Vuex.Store({
     actions: {
         updateLights(ctx) {
             ctx.commit('updateLights');
-        },
-        updateRvc(ctx) {
-            ctx.commit('updateRvc');
-        },
-        updateTv(ctx) {
-            ctx.commit('updateTv');
         },
         updateAutomator(ctx) {
             ctx.commit('updateAutomator');
@@ -56,12 +38,6 @@ export default new Vuex.Store({
         },
         lights: (state) => {
             return state.lights;
-        },
-        rvc: (state) => {
-            return state.rvc;
-        },
-        tv: (state) => {
-            return state.tv;
         },
         automator: (state) => {
             return state.automator;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseUrl, endpoints } from './rest.config.js';
-const { AUTOMATOR, LIGHTS, GROUPS, ROUTER, RVC_API, TV } = endpoints;
+const { AUTOMATOR, LIGHTS, GROUPS, ROUTER } = endpoints;
 
 const buildRequest = (method, url) => {
     return {
@@ -9,34 +9,6 @@ const buildRequest = (method, url) => {
         method
     }
 }
-
-export const fetchTvData = async () => {
-    try {
-        const { data } = await fetchTv();
-        return data;
-    } catch (error) {
-        console.log('OOOOPS', error);
-        return { error: true, message: error };
-    }
-};
-
-export const fetchTv = async () =>
-    await axios(buildRequest('GET', `${baseUrl}/${TV}/power`));
-
-
-export const fetchRvcData = async () => {
-    try {
-        const { data } = await fetchRvc();
-        return data;
-    } catch (error) {
-        console.log('OOOOPS', error);
-        return { error: true, message: error };
-    }
-};
-
-export const fetchRvc = async () =>
-    await axios(buildRequest('GET', `${baseUrl}/${RVC_API}`));
-   
 
 export const fetchHueData = async () => {
     const response = await Promise.all([fetchAllGroups(), fetchAllLights()]);
@@ -69,18 +41,6 @@ export const setBrightness = async (lightId, brightness) => {
     const config = buildRequest('PUT', `${baseUrl}/${LIGHTS}/${lightId}`);
     config.data = { bri: brightness }; 
     return await axios(config);
-}
-
-export const updateRvc = async (data) => {
-    const config = buildRequest('POST', `${baseUrl}/${RVC_API}`);
-    config.data = data;
-    await axios(config);
-}
-
-export const updateTv = async () => {
-    const config = buildRequest('POST', `${baseUrl}/${TV}/ircc`)
-    config.data = { code: 'AAAAAQAAAAEAAAAVAw==' }; 
-    await axios(config);
 }
 
 export const getNetworkClients = async () => {

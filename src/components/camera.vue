@@ -1,9 +1,12 @@
 <template>
-<div>
-    <div v-show="isLoading" class="loading-ripple">
-        <div class="lds-ripple"><div></div><div></div></div>
+<div class="camera-wrapper">
+    <div v-show="isLoading" class="camera-loading">
+        <div class="spinner">
+            <div class="spinner-ring"></div>
+            <v-icon size="20" color="#F5A623">mdi-cctv</v-icon>
+        </div>
     </div>
-    <div v-show="!isLoading" class="camera" :id="`camera-container-${id}`">
+    <div v-show="!isLoading" class="camera-feed" :id="`camera-container-${id}`">
         <canvas :id="`${id}-${quality}`"></canvas>
     </div>
 </div>
@@ -31,7 +34,7 @@ export default {
     },
     destroyed() {
         console.log('DESTROYED');
-        this.player.destroy()
+        if (this.player?.destroy) this.player.destroy()
     },
     methods: {
         async mountCamera() {
@@ -54,65 +57,42 @@ export default {
 </script>
 
 <style lang="css" scoped>
-    canvas {
-        width: 100%;
-    }
-
-    .loading-ripple-wrapper {
-        position: relative;
-        height: 355px;
-    }
-
-    .loading-ripple {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .lds-ripple {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-.lds-ripple div {
-  position: absolute;
-  border: 4px solid #fff;
-  opacity: 1;
-  border-radius: 50%;
-  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
-}
-.lds-ripple div:nth-child(2) {
-  animation-delay: -0.5s;
-}
-@keyframes lds-ripple {
-  0% {
-    top: 36px;
-    left: 36px;
-    width: 0;
-    height: 0;
-    opacity: 0;
-  }
-  4.9% {
-    top: 36px;
-    left: 36px;
-    width: 0;
-    height: 0;
-    opacity: 0;
-  }
-  5% {
-    top: 36px;
-    left: 36px;
-    width: 0;
-    height: 0;
-    opacity: 1;
-  }
-  100% {
-    top: 0px;
-    left: 0px;
-    width: 72px;
-    height: 72px;
-    opacity: 0;
-  }
+.camera-wrapper {
+    min-height: 180px;
 }
 
+.camera-feed canvas {
+    width: 100%;
+    display: block;
+    border-radius: 0;
+}
+
+.camera-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 180px;
+}
+
+.spinner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+}
+
+.spinner-ring {
+    position: absolute;
+    inset: 0;
+    border: 2px solid rgba(245, 166, 35, 0.1);
+    border-top-color: #F5A623;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
 </style>

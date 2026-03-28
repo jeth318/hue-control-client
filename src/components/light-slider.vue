@@ -1,5 +1,20 @@
 <template>
-    <v-slider thumb-label :thumb-size="35" :disabled="!isActive" @change="onSlideEnd" v-model="light.state.bri" :min="0" :max="254"></v-slider>
+    <div class="slider-wrapper">
+        <v-slider
+            :disabled="!isActive"
+            @change="onSlideEnd"
+            v-model="light.state.bri"
+            :min="0"
+            :max="254"
+            color="#F5A623"
+            track-color="rgba(255,255,255,0.08)"
+            thumb-color="#F5A623"
+            thumb-label
+            :thumb-size="28"
+            hide-details
+            dense
+        ></v-slider>
+    </div>
 </template>
 
 <script>
@@ -22,16 +37,34 @@ export default {
     }
 };
 </script>
-<style lang="css">
 
-button.light-button {
-    margin-bottom: 20px;
+<style lang="css">
+.slider-wrapper {
+    flex: 1;
+    min-width: 0;
 }
-.v-slider__thumb-container,
-.v-slider__thumb-label {
+
+.slider-wrapper .v-slider {
+    pointer-events: none !important;
+    margin: 0;
+}
+
+.slider-wrapper .v-slider__thumb-container,
+.slider-wrapper .v-slider__thumb-label {
     pointer-events: auto !important;
 }
-.v-slider {
-    pointer-events: none !important;
+
+.slider-wrapper .v-slider__thumb {
+    width: 14px;
+    height: 14px;
+    left: -7px;
+}
+
+.slider-wrapper .v-slider__track-fill {
+    border-radius: 4px;
+}
+
+.slider-wrapper .v-slider__track-background {
+    border-radius: 4px;
 }
 </style>
